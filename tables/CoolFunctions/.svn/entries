@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1083"
+   name=""
+   committed-date="2004-04-05T20:41:25.000000Z"
+   url="http://www.mpa-garching.mpg.de/svn/cosmo-group/L/L-Galaxies/CoolFunctions"
+   last-author="volker"
+   kind="dir"
+   uuid="019ef673-9300-0410-806d-f16013bd1951"
+   revision="2111"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-00.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="dad5e383bc57f363ec4b5bba6c0317e5"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-10.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="964eb41bd57fe2983a542759646b3bed"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-20.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="15650bdd5b192f2e38aac8d603f0f753"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-30.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="a49226347963b34e5c48f406d4ad8d19"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m+05.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="bebd893d4b2374493a04db55fdb2fb26"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-05.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="9d5753cf498b533faec3bc6e6047e8fa"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_m-15.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="98a51ca55dcb8386bfd7e127e8b1f530"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="ABOUT.txt"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="1b0f7447c125236bfe5ddad8d0127ce1"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="mzero.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="a6950a53c59a9b9959fb11cc41d3131b"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="stripped_mzero.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="ee79e1344c8f12dade620f92522f0b9c"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-00.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="33769235a267916d5f3b3e1b7b832616"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-10.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="8f24bd810acd0aab952bd84a1078dd20"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-20.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="52109314bf94d4110e146c0b0e04b5bc"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:01.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-30.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="526c285a40efb9b81beabedba16afcaf"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:02.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m+05.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="385ac9edfec37bf533abdafe94396395"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:02.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-05.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="05f0c525dfdce55c33c00ff0f0f99c75"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:02.000000Z"/>
+<entry
+   committed-rev="1083"
+   name="m-15.cie"
+   text-time="2005-10-19T19:28:02.000000Z"
+   committed-date="2004-04-05T20:41:25.000000Z"
+   checksum="cfb5ccadfdb1c997b5340b73919e8ed0"
+   last-author="volker"
+   kind="file"
+   prop-time="2005-10-19T19:28:02.000000Z"/>
+</wc-entries>
