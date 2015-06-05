@@ -98,6 +98,8 @@ struct galaxy
     double TemperatureProfHot[N_RADIUS_BIN];
     double CoolingRate[N_RADIUS_BIN];
     double CoolingTime[N_RADIUS_BIN];
+    double MassMetalCold[N_RADIUS_BIN];
+    double MassMetalStar[N_RADIUS_BIN];
     double SDensityCold[N_RADIUS_BIN];
     double SDensityColdMolecular[N_RADIUS_BIN];
     double SDensityColdAtomic[N_RADIUS_BIN];
