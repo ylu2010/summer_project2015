@@ -204,6 +204,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		  {
 		    gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin);
 		    gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
+		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/(2. * M_PI * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])) * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])));
+		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/(2. * M_PI * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])) * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])));
 		  }
 
 	}
@@ -217,10 +219,10 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
 				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
 				(gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
 				gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
-			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i]);
+			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, gal->SDensityMetalStar[i]/1e12);
 	}
 }
