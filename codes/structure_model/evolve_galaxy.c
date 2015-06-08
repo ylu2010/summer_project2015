@@ -204,8 +204,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		  {
 		    gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin);
 		    gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
-		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/(2. * M_PI * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])) * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])));
-		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/(2. * M_PI * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])) * ((gal->RadiusOuter[i])-(gal->RadiusInner[i])));
+		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/(2. * M_PI * (((gal->RadiusOuter[i])*(gal->RadiusOuter[i])) - ((gal->RadiusInner[i])*(gal->RadiusInner[i]))));
+		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/(2. * M_PI * (((gal->RadiusOuter[i])*(gal->RadiusOuter[i])) - ((gal->RadiusInner[i])*(gal->RadiusInner[i]))));
 		  }
 
 	}
