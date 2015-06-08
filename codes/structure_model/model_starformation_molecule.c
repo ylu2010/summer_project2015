@@ -252,7 +252,8 @@ void disc_mass_composition(struct galaxy *gal)
 		{
 		        if (gal->MassCold > 0.0)
 			  {
-			    zcold = gal->MassMetalCold[i]/gal->MassProfCold[i];
+			    //zcold = gal->MassMetalCold[i]/gal->MassProfCold[i];
+			    zcold = gal->MassMetalCold[i]/(gal->SDensityCold[i]*(2. * M_PI * (((gal->RadiusOuter[i])*(gal->RadiusOuter[i])) - ((gal->RadiusInner[i])*(gal->RadiusInner[i])))));
 			  }
 			else zcold = 0.0;
 			if (Metal_gas_evolu)
