@@ -64,6 +64,8 @@ void init(struct galaxy *gal)
     	gal->SDensityStar[i] = 0.0;
     	gal->SDensityColdAtomic[i] = 0.0;
     	gal->SDensityColdMolecular[i] = 0.0;
+	gal->SDensityMetalCold[i] = 0.0;
+	gal->SDensityMetalStar[i] = 0.0;
 	gal->MassMetalCold[i] = 0.0;
 	gal->MassMetalStar[i] = 0.0;
     	gal->CoolingTime[i]=0.0;
