@@ -242,10 +242,6 @@ void disc_mass_composition(struct galaxy *gal)
 	double area, den, matom, mmole, mion, mstar, zcold, zmetal, fmole;
 	double si_ion = 0.0;
 
-	if (gal->MassCold > 0.0) zcold = gal->MetalCold/gal->MassCold;
-	else zcold = 0.0;
-	if (Metal_gas_evolu) zmetal = dmax(zcold / SolarMetallicity, MinimumMetallicityRelativeToSolar);
-	else zmetal = 0.5;
 //printf("disc_mass_composition: zmetal=%g\n", zmetal);
 	nbin = gal->nbin;
 	for(i=0, matom=0, mmole=0, mion=0, mstar=0; i<nbin; i++)
@@ -254,6 +250,16 @@ void disc_mass_composition(struct galaxy *gal)
 		den = gal->SDensityCold[i] - si_ion * 1e12;
 		if (den > 0.0)
 		{
+		        if (gal->MassCold > 0.0)
+			  {
+			    zcold = gal->MassMetalCold[i]/gal->MassProfCold[i];
+			  }
+			else zcold = 0.0;
+			if (Metal_gas_evolu)
+			  {
+			    zmetal = dmax(zcold / SolarMetallicity, MinimumMetallicityRelativeToSolar);
+			  }
+			else zmetal = 0.5;
 			fmole = molecular_fraction( den, zmetal );
 			gal->SDensityColdMolecular[i] = gal->SDensityCold[i] * fmole;
 			gal->SDensityColdAtomic[i] = gal->SDensityCold[i] * (1-fmole);

@@ -64,7 +64,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 
 	z_min = z0 = Redshift_end; z_max = 10;
 	mvir_in = mah(z_max);
-	dz = (z_max-z_min)/400;
+ 	dz = (z_max-z_min)/400;
 	dz0 = dz;
 
 	Redshift = z = z_max;
@@ -197,6 +197,15 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		gal->MassCloud += f_cloud_accretion * dmh;
 		//printf("evolve: z=%g %g %g %g %g %g\n", z, mh, gal->VelocityVirial, v, f_hot_accretion, gal->MassStar);
 		//gal->MassHot = mhot;
+
+		//Splitting Metals evenly into radius bins
+		int i;
+		for(i=0; i<gal->nbin; i++)
+		  {
+		    gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin);
+		    gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
+		  }
+
 	}
 	//printf("evolve:%g\n",gal->RateStarFormation );
 	//adiabatic_contraction(gal);
@@ -208,10 +217,10 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
 				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
 				(gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
 				gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
-				gal->MassProfDM[i], gal->MassProfDMContracted[i]);
+			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i]);
 	}
 }
