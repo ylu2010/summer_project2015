@@ -331,11 +331,13 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     double z0, u0, t0;
     double dden, area, sfe, sfe1, sfr, sd_sfr, ofr, sd_ofr, sd_cold_tmp, mstar, mcold, fml, mp;
     double loadingfactor, tdyn, sfe_max=1e33; //0.4e12;
-    double zcold, zyeildhot;
+    double zcoldglobal, zcold, zyeildhot;
 
     nbin = gal->nbin;
-    if (gal->MassCold > 0.0) zcold = gal->MetalCold/gal->MassCold;
-    else zcold = 0.0;
+
+    //changed zcold to zcoldglobal to be consistent with zcold as radially dependent
+    if (gal->MassCold > 0.0) zcoldglobal = gal->MetalCold/gal->MassCold; 
+    else zcoldglobal = 0.0;
 
     u0 = UnitMass_in_g / (UnitLength_in_cm * UnitLength_in_cm);
 
@@ -350,6 +352,11 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     	//if (gal->MassHalo/mah(0.0) < 2./halo_concentration_prada(0, mah(0.0))) dden = gal->SDensityCold[i];
     	sd_cold_tmp = gal->SDensityCold[i];
     	area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+
+	//like zcoldglobal but in loop
+	if (gal->MassCold > 0.0) zcold = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+	else zcold = 0.0;
+
     	if(dden > 0.0 && sd_cold_tmp >0.0)
     	{
     		//sd_cold_tmp = gal->SDensityCold[i];
@@ -412,6 +419,13 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     	//}
     	mstar += gal->SDensityStar[i] * area;
     	mcold += gal->SDensityCold[i] * area;
+
+    // metallicity by radius //sfr and ofr are global so using sd_sfr * area and sd_ofr * area ( / dt???) instead
+    gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
+    gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
+      - sd_ofr * area * dt * zcold - sd_sfr * area * dt * zcold * (1. -Par.StellarMassLossFraction); 
+    // gal->MassMetalHot[i] += sdr_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot; //Assumes hot mass deposited at location of star formation
+
     }
     //printf("debug_star_formation: %g %g %g %g %g %g\n", t, hubble_time(0) * xH0_recip, dt, sfr, mstar, mcold);
     gal->MassCold = mcold;
@@ -423,10 +437,14 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     gal->RateOutflow = ofr;
 
     // metallicity
-    gal->MetalStar += sfr * dt * zcold * (1-Par.StellarMassLossFraction);
-    gal->MetalCold += sfr * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) - ofr * dt * zcold - sfr * dt * zcold * (1.-Par.StellarMassLossFraction);
+    gal->MetalStar += sfr * dt * zcoldglobal * (1-Par.StellarMassLossFraction);
+    gal->MetalCold += sfr * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) - ofr * dt * zcoldglobal - sfr * dt * zcoldglobal * (1.-Par.StellarMassLossFraction);
     gal->MetalHot += sfr * dt * Par.Yield * Par.ZFractionYieldToHot;
-    gal->MetalEject += ofr * dt * zcold + sfr * dt * Par.Yield * Par.ZFractionYieldToEject;
+    gal->MetalEject += ofr * dt * zcoldglobal + sfr * dt * Par.Yield * Par.ZFractionYieldToEject;
+
+
+    
+
 
     //printf("SF:%g %g %g %g %g %g\n", gal->MassCold, gal->MassStar, gal->MetalCold, gal->MetalStar, sfr, ofr);
 }
@@ -508,11 +526,13 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
     double z0, u0, t0;
     double dden, area, sfe, sfe1, sfr, sd_sfr, ofr_reheat, ofr_eject, sd_ofr_reheat, sd_ofr_eject, sd_cold_tmp, mstar, mcold, fml, mp;
     double loadingfactor_reheat, loadingfactor_eject, tdyn, sfe_max=1e33; //0.4e12;
-    double zcold;
+    double zcoldglobal, zcold;
 
     nbin = gal->nbin;
-    if (gal->MassCold > 0.0) zcold = gal->MetalCold/gal->MassCold;
-    else zcold = 0.0;
+
+    //changed zcold to zcoldglobal so that zcold consistently used as radial variable
+    if (gal->MassCold > 0.0) zcoldglobal = gal->MetalCold/gal->MassCold;
+    else zcoldglobal = 0.0;
 
     u0 = UnitMass_in_g / (UnitLength_in_cm * UnitLength_in_cm);
     j = floor(t/Bin_size_time);
@@ -525,6 +545,11 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
     	dden = gal->SDensityColdMolecular[i];
     	sd_cold_tmp = gal->SDensityCold[i];
     	area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+
+	//Like zcoldglobal but in loop
+	if (gal->MassCold > 0.0) zcold = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+	else zcold = 0.0;
+
     	if(dden > 0.0 && sd_cold_tmp >0.0)
     	{
     		//sd_cold_tmp = gal->SDensityCold[i];
@@ -581,6 +606,12 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
     		sfr += sd_sfr * area;
     		ofr_reheat += sd_ofr_reheat * area /dt;
     		ofr_eject += sd_ofr_eject * area / dt;
+
+    //metallicity by radius //sfr, ofr_reheat, and ofr_eject are global so using sd_sfr * area, sd_ofr_reheat * area ( / dt???), and  sd_ofr_eject * area ( / dt???)
+    gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
+    gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
+      - (sd_ofr_reheat * area + sd_ofr_eject * area) * dt * zcold - sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
+    // gal->MassMetalHot[i] += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot + sd_ofr_reheat * area * dt * zcold //assumes hot metals deposited locally
 /*
     		mstar += gal->SDensityStar[i] * area;
     		mcold += gal->SDensityCold[i] * area;
@@ -599,10 +630,11 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 
     // metallicity
     //gal->MetalStar += sfr * dt * zcold * (1-Par.StellarMassLossFraction);
-    gal->MetalStar += sfr * dt * zcold * (1-Par.StellarMassLossFraction);
-    gal->MetalCold += sfr * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) - (ofr_reheat+ofr_eject) * dt * zcold - sfr * dt * zcold * (1.-Par.StellarMassLossFraction);
-    gal->MetalHot += sfr * dt * Par.Yield * Par.ZFractionYieldToHot + ofr_reheat * dt * zcold;
-    gal->MetalEject += ofr_eject * dt * zcold + sfr * dt * Par.Yield * Par.ZFractionYieldToEject;
+    gal->MetalStar += sfr * dt * zcoldglobal * (1-Par.StellarMassLossFraction);
+    gal->MetalCold += sfr * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) - (ofr_reheat+ofr_eject) * dt * zcoldglobal - 
+      sfr * dt * zcoldglobal * (1.-Par.StellarMassLossFraction);
+    gal->MetalHot += sfr * dt * Par.Yield * Par.ZFractionYieldToHot + ofr_reheat * dt * zcoldglobal;
+    gal->MetalEject += ofr_eject * dt * zcoldglobal + sfr * dt * Par.Yield * Par.ZFractionYieldToEject;
 }
 
 double reioncorporation_model_henriques2013(double mvir)

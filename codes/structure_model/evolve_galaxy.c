@@ -198,14 +198,14 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		//printf("evolve: z=%g %g %g %g %g %g\n", z, mh, gal->VelocityVirial, v, f_hot_accretion, gal->MassStar);
 		//gal->MassHot = mhot;
 
-		//Splitting Metals evenly into radius bins
+		//Now simply calculating SDensity for Metals
 		int i;
 		double area;
 		for(i=0; i<gal->nbin; i++)
 		  {
 		    area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
-		    gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin);
-		    gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
+		    //gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin); //For splitting metals uniformly by radius bin
+		    //gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
 		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
 		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
 		  }
@@ -225,6 +225,7 @@ void print_galaxy(struct galaxy *gal)
 				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
 				(gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
 				gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
-			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, gal->SDensityMetalStar[i]/1e12);
+			gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
+			gal->SDensityMetalStar[i]/1e12);
 	}
 }
