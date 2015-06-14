@@ -98,6 +98,7 @@ struct galaxy
     double TemperatureProfHot[N_RADIUS_BIN];
     double CoolingRate[N_RADIUS_BIN];
     double CoolingTime[N_RADIUS_BIN];
+  //double MassMetalHot[N_RADIUS_BIN]; //not tracked; not in print_galaxy
     double MassMetalCold[N_RADIUS_BIN];
     double MassMetalStar[N_RADIUS_BIN];
     double SDensityMetalCold[N_RADIUS_BIN]; //new
