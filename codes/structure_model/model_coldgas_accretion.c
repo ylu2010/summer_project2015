@@ -109,6 +109,7 @@ void cold_gas_accretion_surface(struct galaxy *gal, double thubble, double dt)
 		r = 0.5*(gal->RadiusInner[i] + gal->RadiusOuter[i]);
 		gal->SDensityCold[i] += sig0 * exp(-r/gal->RadiusDisc);
 		//printf("%d %g %g %g %g %g %g\n", i, bar, gal->RadiusInner[i], gal->RadiusOuter[i], gal->MassProfHalo[i], gal->SDensityCold[i], gal->SDensityStar[i] );
+		gal->MassMetalCold[i] += gal->CoolingRate[i] * dt * zhot;
 	}
 
 	// metallicity

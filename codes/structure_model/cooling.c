@@ -45,7 +45,7 @@ void read_cooling_function(void)
     for(i=0; i<8; i++)metallicity[i]+=log10(SolarMetallicity);
     for(i=0; i<8; i++)
     {
-        sprintf(filename,"/Users/luyu/project_data/ModelTables_cb07/CoolFunctions/stripped_%s", coolfilename[i]);
+        sprintf(filename,"/Users/nathan/project_data/ModelTables_cb07/CoolFunctions/stripped_%s", coolfilename[i]);
         if(!(  fd=fopen(filename,"r")))
         {
             printf("I can not open the file '%s'.",filename);
