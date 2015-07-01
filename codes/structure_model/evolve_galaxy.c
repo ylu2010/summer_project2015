@@ -74,6 +74,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 	gal->MassCold = mc = 0;
 	dz = dz0;
 
+	gal->MassBin = Mass_bin; //to easily separate different mass halos in data tables
+
 	//reset_parameter(z, mh); // *******************///
 
 	rho = Delta_vir(z) * rho_crit(z) * xhubble * xhubble;
@@ -140,6 +142,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		//star_formation_global(gal, dt);
 		//star_formation_surface(gal, thubble+0.5*dt, dt);
 
+
+
 		if(Do_reinfall)
 		{
 			star_formation_surface_molecule_with_guo2011_feedback(gal, thubble+0.5*dt, dt); // a model mimicking the feedback model of Guo et al. 2011
@@ -176,12 +180,12 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 			gal->MassHot = dmax(gal->MassHalo * f_hot_accretion - (gal->MassStar+gal->MassCold+gal->MassEject), 0);
 			disc_mass_composition(gal);
 			//printf("mcold=%g matom=%g %g\n", gal->MassCold, gal->MassColdAtomic, f_hot_accretion);
-			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
+			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
 				gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
 				gal->MassColdAtomic, gal->MassColdMolecular, gal->MassColdIonized,
 				gal->RadiusHalo, gal->RadiusDisc, gal->RadiusHalfCold, gal->RadiusHalfStar, gal->RadiusCooling, gal->ConcenHalo,
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
-				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject);
+				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
 		}
 		z -= dz;
 		Redshift = z;
@@ -198,21 +202,24 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		//printf("evolve: z=%g %g %g %g %g %g\n", z, mh, gal->VelocityVirial, v, f_hot_accretion, gal->MassStar);
 		//gal->MassHot = mhot;
 
-		//Now simply calculating SDensity for Metals
+		//Calculating SDensity for Metals
 		int i;
 		double area;
 		for(i=0; i<gal->nbin; i++)
 		  {
 		    area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
-		    //gal->MassMetalCold[i] = (gal->MetalCold)/(gal->nbin); //For splitting metals uniformly by radius bin
-		    //gal->MassMetalStar[i] = (gal->MetalStar)/(gal->nbin);
 		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
 		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
+		    //Calculating Metallicity
+		    gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
+		    gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
 		  }
 
 	}
 	//printf("evolve:%g\n",gal->RateStarFormation );
 	//adiabatic_contraction(gal);
+	cold_gas_accretion_surface(gal, thubble, dt); //added Jun 30 for RI debugging
+	disc_mass_composition(gal); //added Jun 30 for RI debugging
 	if(Write_prof_file) print_galaxy(gal);
 }
 
@@ -221,11 +228,11 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
-				(gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
-				gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
-			gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
-			gal->SDensityMetalStar[i]/1e12);
+		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12),
+			        (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i],
+			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
+			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
+			        gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin);
 	}
 }
