@@ -180,7 +180,7 @@ void init_file(void)
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin\n");
+		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin\n");
 	}
 
 	//printf("done init_file\n");

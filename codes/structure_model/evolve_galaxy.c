@@ -211,14 +211,18 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
 		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
 		    //Calculating Metallicity
-		    gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
-		    gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
+			if (gal->SDensityCold[i] > 0.0)
+		    	gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
+			else gal->MetallicityCold[i] = 0.0;
+			if (gal->SDensityStar[i] > 0.0)
+		    	gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
+			else gal->MetallicityStar[i] = 0.0;
 		  }
 
 	}
 	//printf("evolve:%g\n",gal->RateStarFormation );
 	//adiabatic_contraction(gal);
-	cold_gas_accretion_surface(gal, thubble, dt); //added Jun 30 for RI debugging
+	//cold_gas_accretion_surface(gal, thubble, dt); //added Jun 30 for RI debugging
 	disc_mass_composition(gal); //added Jun 30 for RI debugging
 	if(Write_prof_file) print_galaxy(gal);
 }
@@ -228,10 +232,10 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
 				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12),
 			        (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i],
-			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
+			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i], gal->SDensityOFR[i], 
 			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
 			        gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin);
 	}
