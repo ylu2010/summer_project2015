@@ -57,10 +57,10 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 	double z0, dz, dz0, z;
 	double mh, ms, mc, mhot;
 	double dmhdt, thubble, dt, dmh;
-	double rho, v, dar, bar, f_hot_accretion, f_cloud_accretion, factor;
+	double dar, bar, f_hot_accretion, f_cloud_accretion;
 
 
-	factor = 1.e3 * ELECTRONVOLT * pow(BaryonFrac/0.6/PROTONMASS*UnitMass_in_g, 2./3)/BOLTZMANN / (UnitLength_in_cm * UnitLength_in_cm);
+//	factor = 1.e3 * ELECTRONVOLT * pow(BaryonFrac/0.6/PROTONMASS*UnitMass_in_g, 2./3)/BOLTZMANN / (UnitLength_in_cm * UnitLength_in_cm);
 
 	z_min = z0 = Redshift_end; z_max = 10;
 	mvir_in = mah(z_max);
@@ -78,6 +78,15 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 
 	//reset_parameter(z, mh); // *******************///
 
+    //Initial halo_adjust***************************************
+    //printf("begin\n");
+    halo_adjust(gal,z,mh);
+    gal->VelocityMax = halo_vmax(gal->VelocityVirial, gal->ConcenHalo);
+    gal->MassHot = mhot = mh * hot_gas_accretion_fraction(gal, z);
+    gal->RadiusHalfStar = 0.015 * gal->RadiusHalo;
+    gal->RadiusHalfCold = gal->RadiusHalfStar * 2.6;
+    disc_mass_composition(gal);
+    /*
 	rho = Delta_vir(z) * rho_crit(z) * xhubble * xhubble;
 	gal->VelocityVirial = v = sqrt(G) * pow(4./3*M_PI*rho, 1./6) * pow(mh, 1./3);
 	//gal->VelcoityVirial = v = pow(G*mh*xH(z) * sqrt(0.5*Delta_vir(z)), 1./3);  // just another way
@@ -92,6 +101,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 	gal->RadiusHalfCold = gal->RadiusHalfStar * 2.6;
 	gal->RadiusDisc = disk_radius(gal);
 	disc_mass_composition(gal);
+    */
 
 	while (z >= z_min-0.5*dz)
 	{
@@ -118,6 +128,12 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		//else dz = dz0;
 		else dz = z_hubble_time(thubble) - z_hubble_time(thubble + 13.6/400);
 		//printf("z=%g dz=%g\n",z, dz);
+        
+        //Repeated halo_adjust *********************************
+        halo_adjust(gal, z,mh);
+        cold_gas_accretion_surface(gal, thubble, dt);
+        disc_mass_composition(gal);
+        /*
 		rho = Delta_vir(z) * rho_crit(z) * xhubble * xhubble;
 		gal->VelocityVirial = v = sqrt(G) * pow(4./3*M_PI*rho, 1./6) * pow(mh, 1./3);
 		//gal->VelcoityVirial = v = pow(G*mh*xH(z) * sqrt(0.5*Delta_vir(z)), 1./3);  // just another way
@@ -141,6 +157,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		disc_mass_composition(gal);
 		//star_formation_global(gal, dt);
 		//star_formation_surface(gal, thubble+0.5*dt, dt);
+         */
 
 
 
@@ -201,7 +218,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		gal->MassCloud += f_cloud_accretion * dmh;
 		//printf("evolve: z=%g %g %g %g %g %g\n", z, mh, gal->VelocityVirial, v, f_hot_accretion, gal->MassStar);
 		//gal->MassHot = mhot;
-
+/*
 		//Calculating SDensity for Metals
 		int i;
 		double area;
@@ -218,13 +235,57 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		    	gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
 			else gal->MetallicityStar[i] = 0.0;
 		  }
+ */
 
 	}
 	//printf("evolve:%g\n",gal->RateStarFormation );
 	//adiabatic_contraction(gal);
 	//cold_gas_accretion_surface(gal, thubble, dt); //added Jun 30 for RI debugging
-	disc_mass_composition(gal); //added Jun 30 for RI debugging
+	//disc_mass_composition(gal); //added Jun 30 for RI debugging
+    
+    //Terminal halo_adjust ************************************
+    halo_adjust(gal,z,mh);
+    cold_gas_accretion_surface(gal, thubble, dt);
+    disc_mass_composition(gal);
+    
+    //Calculating SDensity for Metals
+    int i;
+    double area;
+    for(i=0; i<gal->nbin; i++)
+		  {
+              area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+              gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
+              gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
+              //Calculating Metallicity
+              if (gal->SDensityCold[i] > 0.0)
+                  gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
+              else gal->MetallicityCold[i] = 0.0;
+              if (gal->SDensityStar[i] > 0.0)
+                  gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
+              else gal->MetallicityStar[i] = 0.0;
+          }
+    
 	if(Write_prof_file) print_galaxy(gal);
+}
+
+void halo_adjust(struct galaxy *gal, double z, double mh)
+{
+    double rho, v, factor;
+    
+    factor = 1.e3 * ELECTRONVOLT * pow(BaryonFrac/0.6/PROTONMASS*UnitMass_in_g, 2./3)/BOLTZMANN / (UnitLength_in_cm * UnitLength_in_cm);
+    
+    rho = Delta_vir(z) * rho_crit(z) * xhubble * xhubble;
+    gal->VelocityVirial = v = sqrt(G) * pow(4./3*M_PI*rho, 1./6) * pow(mh, 1./3);
+    gal->RadiusHalo = pow(3.*mh/(4.*M_PI*rho), 1./3);
+    gal->ConcenHalo = halo_concentration(z, gal);
+    gal->TemperatureVirial = 35.9 * v * v;
+    gal->EntropyVirial = gal->TemperatureVirial/pow(rho, 2./3) / factor;
+    gal->RadiusDisc = disk_radius(gal);
+    halo_mass_profile(gal);
+    hot_gas_profile_power_law_entropy(gal);
+    //cold_gas_accretion_surface(gal, thubble, dt);
+    //disc_mass_composition(gal);
+    //printf("%g\n",rho);
 }
 
 void print_galaxy(struct galaxy *gal)
