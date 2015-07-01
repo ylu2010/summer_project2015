@@ -25,6 +25,7 @@ void init(struct galaxy *gal)
 	gal->ntbin = ntbin;
     gal->z = 100;
     gal->MassHalo = 0.0;
+    gal->MassBin = 0.0;
     gal->MassHot = 0.0;
     gal->MassCloud=0.0;
     gal->MassCold = 0.0;
@@ -68,7 +69,9 @@ void init(struct galaxy *gal)
 	gal->SDensityMetalStar[i] = 0.0;
 	gal->MassMetalCold[i] = 0.0;
 	gal->MassMetalStar[i] = 0.0;
-    	gal->CoolingTime[i]=0.0;
+	gal->MetallicityCold[i] = 0.0;
+	gal->MetallicityStar[i] = 0.0;
+    	gal->CoolingTime[i] = 0.0;
     	for(j=0; j<ntbin; j++)
     	{
     		gal->SDensitySFH[i][j] = 0.0;
