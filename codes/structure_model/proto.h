@@ -73,6 +73,7 @@ double disk_radius(struct galaxy *gal);
 void init_file(void);
 void close_file(void);
 
+void halo_adjust(struct galaxy *gal, double z, double mh);
 void print_galaxy(struct galaxy *gal);
 
 double dmax(double x, double y);
