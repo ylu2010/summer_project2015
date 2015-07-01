@@ -259,8 +259,10 @@ void disc_mass_composition(struct galaxy *gal)
 			else zmetal = 0.5;
 
 			fmole = molecular_fraction( den, zmetal );
+/*
 			gal->SDensityColdMolecular[i] = gal->SDensityCold[i] * fmole;
 			gal->SDensityColdAtomic[i] = gal->SDensityCold[i] * (1-fmole);
+*/
 			matom += gal->SDensityColdAtomic[i] * area;
 			mmole += gal->SDensityColdMolecular[i] * area;
 			mion += si_ion * area;
@@ -268,8 +270,12 @@ void disc_mass_composition(struct galaxy *gal)
 		}
 		else
 		{
-		  mion += gal->SDensityCold[i] * area;
+			fmole = 0.0;
+			mion += gal->SDensityCold[i] * area;
 		}
+		gal->SDensityColdMolecular[i] = gal->SDensityCold[i] * fmole;
+        gal->SDensityColdAtomic[i] = gal->SDensityCold[i] * (1-fmole);
+
 		mstar += gal->SDensityStar[i] * area;
 
 		gal->MassProfStar[i] = mstar;
@@ -405,6 +411,7 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
 //exit(0);
     		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
     		gal->SDensitySFR[i] = sd_sfr / dt;
+			gal->SDensityOFR[i] = sd_ofr / dt;
     		sfr += sd_sfr * area; //if global metallicity calculated in loop, is this necessary?
     		ofr += sd_ofr * area /dt; //if global metallicity calculated in loop, is this necessary?
 
@@ -593,6 +600,7 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 
     		sd_cold_tmp -= (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
     		//sd_cold_tmp += fml;
+//printf("debug: %d %g %g %g %g %g %g %g\n", i, gal->z, loadingfactor_reheat, loadingfactor_eject, sd_sfr, dt, (loadingfactor_reheat+loadingfactor_eject) * sd_sfr * dt, sd_cold_tmp);
 
     		//loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
     		sd_ofr_reheat = dmin(loadingfactor_reheat * sd_sfr * dt, sd_cold_tmp);
@@ -600,10 +608,11 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
     		sd_ofr_eject = dmin(loadingfactor_eject * sd_sfr * dt, sd_cold_tmp);
     		sd_cold_tmp -= sd_ofr_eject;
 
-//printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
+//printf("debug: %d %g %g %g %g %g %g %g\n", i, gal->z, loadingfactor_reheat, loadingfactor_eject, sd_sfr, dt, (loadingfactor_reheat+loadingfactor_eject) * sd_sfr * dt, sd_cold_tmp);
 //exit(0);
     		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
     		gal->SDensitySFR[i] = sd_sfr / dt;
+			gal->SDensityOFR[i] = (sd_ofr_reheat + sd_ofr_eject) ;
     		sfr += sd_sfr * area; //necessary if global metallicity calculation is in loop?
     		ofr_reheat += sd_ofr_reheat * area /dt;  //necessary if global metallicity calculation is in loop?
     		ofr_eject += sd_ofr_eject * area / dt;  //necessary if global metallicity calculation is in loop?
