@@ -1,0 +1,467 @@
+cooling.c:	mvir = gal->MassHalo;
+cooling.c:	rvir = gal->RadiusHalo;
+cooling.c:	hotgas = gal->MassHot;
+cooling.c:	coldgas = gal->MassCold;
+cooling.c:	vvir = gal->VelocityVirial;
+cooling.c:                gal->RadiusCooling = rcool;
+cooling.c:                //printf("cooling2: %g %g %g %g\n", gal->RadiusCooling, rvir, hotgas, cool_rate);
+cooling.c:                gal->RadiusCooling = rcool;
+cooling.c:                printf("cooling2: %g %g %g %g\n", gal->RadiusCooling, rvir, hotgas, cool_rate);
+cooling.c:	mstar = gal->MassStar;
+cooling.c:	mvir = gal->MassHalo;
+cooling.c:	hotgas = gal->MassHot;
+cooling.c:	rvir = gal->RadiusHalo;
+cooling.c:	vvir = gal->VelocityVirial;
+cooling.c:	rdisk = gal->RadiusDisc;
+cooling.c:    logz_gas = log10(gal->MetalHot/gal->MassHot);
+cooling.c:	for(i=0; i<gal->nbin; i++)
+cooling.c:		gal->TemperatureProfHot[i] = 6e5;
+cooling.c:		gal->DensityProfHot[i] = 1e3*1e9;
+cooling.c:	gal->SpinCooling = 1.0;
+cooling.c:		for(i=0, hotgas = 0, cr=0; i<gal->nbin; i++)
+cooling.c:			if(gal->RadiusOuter[i] >= gal->RadiusHalo) break;
+cooling.c:			ff_time = gal->RadiusOuter[i]/rvir * dyn_time;
+cooling.c:			t_gas = gal->TemperatureProfHot[i];
+cooling.c:			den = gal->DensityProfHot[i];
+cooling.c:			cool_rate = (gal->MassProfHot[i] - hotgas) / dmax(cool_time, ff_time);
+cooling.c:			//cool_rate = (gal->MassProfHot[i] - hotgas) / cool_time;
+cooling.c:			//cool_rate = (gal->MassProfHalo[i]-halo_mass)*1e-6;
+cooling.c:			gal->CoolingRate[i] = cool_rate;
+cooling.c:			j_specific = specific_angular_momentum_profile(gal->RadiusOuter[i]);
+cooling.c:			j_halo +=  j_specific * (gal->MassProfHalo[i]-halo_mass);
+cooling.c:                //printf("cooling1: %d %g %g %g %g %g %g\n", i, gal->RadiusOuter[i], gal->DensityProfHot[i], gal->TemperatureProfHot[i], cool_time, ff_time, dt);
+cooling.c:				rcool = gal->RadiusOuter[i];
+cooling.c:            //printf("cooling2: %g %g %g %g\n", gal->RadiusOuter[i], rvir, hotgas, cool_rate);
+cooling.c:            hotgas = gal->MassProfHot[i];
+cooling.c:            halo_mass = gal->MassProfHalo[i];
+cooling.c:            if (i==0) gal->TimeCooling = cool_time;
+cooling.c:            gal->CoolingTime[i] = cool_time;
+cooling.c:		if(cr > 0.0) gal->SpinCooling = j_gas/j_halo*halo_mass/cr;
+cooling.c:   	gal->TimeCooling = cool_time;
+cooling.c:   	//gal->TimeCooling = t_gas;
+cooling.c:   	//if(cr > 0.0) gal->SpinCooling = j_gas/j_halo*halo_mass/cr;
+cooling.c:   	//printf("cooling: %g %g %g %g %g %g %g\n", gal->MassHalo, t_gas, den*UnitMass_in_g/(UnitLength_in_cm*UnitLength_in_cm*UnitLength_in_cm)/PROTONMASS, cool_time, gal->TimeCooling, hubble_time, UnitTime_in_Second/1e9/3.15360e+07);
+cooling.c:   	//printf("cooling: %g %g j=%g %g %g %g %g %g\n", hubble_time, gal->MassHot, j_gas, j_halo, j_gas/j_halo, cr/halo_mass, gal->SpinCooling, gal->TimeCooling);
+cooling.c:   	//printf("spin in cooling: %g %g\n", gal->z, j_gas/j_halo*halo_mass/cr);
+cooling.c:   	gal->RadiusCooling = rcool;
+cooling.c://printf("cooling: z=%g hr=%g cr=%g\n", gal->z, hr, cr);
+evolve_galaxy.c:	gal->z = z;
+evolve_galaxy.c:	gal->MassHalo = mh = mvir_in;
+evolve_galaxy.c:	gal->MassStar = ms = 0;
+evolve_galaxy.c:	gal->MassCold = mc = 0;
+evolve_galaxy.c:	gal->MassBin = Mass_bin; //to easily separate different mass halos in data tables
+evolve_galaxy.c:	gal->VelocityVirial = v = sqrt(G) * pow(4./3*M_PI*rho, 1./6) * pow(mh, 1./3);
+evolve_galaxy.c:	//gal->VelcoityVirial = v = pow(G*mh*xH(z) * sqrt(0.5*Delta_vir(z)), 1./3);  // just another way
+evolve_galaxy.c:	gal->RadiusHalo = pow(3.*mh/(4.*M_PI*rho), 1./3);
+evolve_galaxy.c:	gal->ConcenHalo = halo_concentration(z, gal);
+evolve_galaxy.c:	gal->VelocityMax = halo_vmax(gal->VelocityVirial, gal->ConcenHalo);
+evolve_galaxy.c:	gal->TemperatureVirial = 35.9 * v * v;
+evolve_galaxy.c:	gal->EntropyVirial = gal->TemperatureVirial/pow(rho, 2./3) / factor;
+evolve_galaxy.c:	gal->MassHot = mhot = mh * hot_gas_accretion_fraction(gal, z);
+evolve_galaxy.c:	gal->RadiusHalfStar = 0.015 * gal->RadiusHalo;
+evolve_galaxy.c:	gal->RadiusHalfCold = gal->RadiusHalfStar * 2.6;
+evolve_galaxy.c:	gal->RadiusDisc = disk_radius(gal);
+evolve_galaxy.c:		gal->RateHaloAccretion = dmhdt;
+evolve_galaxy.c:		gal->VelocityVirial = v = sqrt(G) * pow(4./3*M_PI*rho, 1./6) * pow(mh, 1./3);
+evolve_galaxy.c:		//gal->VelcoityVirial = v = pow(G*mh*xH(z) * sqrt(0.5*Delta_vir(z)), 1./3);  // just another way
+evolve_galaxy.c:		gal->RadiusHalo = pow(3.*mh/(4.*M_PI*rho), 1./3);
+evolve_galaxy.c:		gal->ConcenHalo = halo_concentration(z, gal);
+evolve_galaxy.c:		gal->TemperatureVirial = 35.9 * v * v;
+evolve_galaxy.c:		gal->EntropyVirial = gal->TemperatureVirial/pow(rho, 2./3) / factor;
+evolve_galaxy.c:		gal->RadiusDisc = disk_radius(gal); //Par.DiskRadiusFactor *(1.+z)/2 * 0.035/sqrt(2.) * gal->RadiusHalo;
+evolve_galaxy.c:		//gal->ConcenHalo = 10.;
+evolve_galaxy.c:		//gal->MassHot = BaryonFrac * gal->MassHalo;
+evolve_galaxy.c:		//printf("%g %g %g %g %g %g %g %g\n", z, thubble, gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->RadiusHalo, gal->VelocityVirial);
+evolve_galaxy.c:		//if(write_in_file) fprintf(fp_halo, "%g %g %g %g %g %g %g %g %g %g %g %g %g\n", z, thubble, gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->RateHaloAccretion, gal->RateStarFormation,
+evolve_galaxy.c:		//		gal->MassEject, gal->MassColdMolecular, gal->MassColdAtomic, gal->MassColdIonized, gal->RateCooling);
+evolve_galaxy.c:		//if(gal->MassStar > 0.00001 * gal->MassHalo && gal->MassCold > 0.00001 * gal->MassHalo)
+evolve_galaxy.c:			gal->RadiusHalfStar = interpolate_bipoint(gal->MassProfStar, gal->RadiusOuter, N_RADIUS_BIN, 0.5*gal->MassProfStar[N_RADIUS_BIN-1], 0);  // in Mpc
+evolve_galaxy.c:			gal->RadiusHalfCold = interpolate_bipoint(gal->MassProfCold, gal->RadiusOuter, N_RADIUS_BIN, 0.5*gal->MassProfCold[N_RADIUS_BIN-1], 0);  // in Mpc
+evolve_galaxy.c:			gal->RadiusHalfStar = 0.015 * gal->RadiusHalo;
+evolve_galaxy.c:			gal->RadiusHalfCold = gal->RadiusHalfStar * 2.6;
+evolve_galaxy.c:			gal->MassHot = dmax(gal->MassHalo * f_hot_accretion - (gal->MassStar+gal->MassCold+gal->MassEject), 0);
+evolve_galaxy.c:			//printf("mcold=%g matom=%g %g\n", gal->MassCold, gal->MassColdAtomic, f_hot_accretion);
+evolve_galaxy.c:			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
+evolve_galaxy.c:				gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
+evolve_galaxy.c:				gal->MassColdAtomic, gal->MassColdMolecular, gal->MassColdIonized,
+evolve_galaxy.c:				gal->RadiusHalo, gal->RadiusDisc, gal->RadiusHalfCold, gal->RadiusHalfStar, gal->RadiusCooling, gal->ConcenHalo,
+evolve_galaxy.c:				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
+evolve_galaxy.c:				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
+evolve_galaxy.c:		gal->z = z;
+evolve_galaxy.c:		gal->MassHalo = mh;
+evolve_galaxy.c:		gal->MassHot = dmax(gal->MassHalo * f_hot_accretion - (gal->MassStar+gal->MassCold+gal->MassEject), 0);
+evolve_galaxy.c:		gal->MassCloud += f_cloud_accretion * dmh;
+evolve_galaxy.c:		//printf("evolve: z=%g %g %g %g %g %g\n", z, mh, gal->VelocityVirial, v, f_hot_accretion, gal->MassStar);
+evolve_galaxy.c:		//gal->MassHot = mhot;
+evolve_galaxy.c:		for(i=0; i<gal->nbin; i++)
+evolve_galaxy.c:		    area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+evolve_galaxy.c:		    gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
+evolve_galaxy.c:		    gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
+evolve_galaxy.c:		    gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
+evolve_galaxy.c:		    gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
+evolve_galaxy.c:	//printf("evolve:%g\n",gal->RateStarFormation );
+evolve_galaxy.c:	for(i=0; i<gal->nbin; i++)
+evolve_galaxy.c:				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
+evolve_galaxy.c:				(gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
+evolve_galaxy.c:				gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i],
+evolve_galaxy.c:			gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
+evolve_galaxy.c:			gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin);
+init.c:	gal->nbin = nbin;
+init.c:	gal->ntbin = ntbin;
+init.c:    gal->z = 100;
+init.c:    gal->MassHalo = 0.0;
+init.c:    gal->MassBin = 0.0;
+init.c:    gal->MassHot = 0.0;
+init.c:    gal->MassCloud=0.0;
+init.c:    gal->MassCold = 0.0;
+init.c:    gal->MassStar = 0.0;
+init.c:    gal->MassColdAtomic = 0.0;
+init.c:    gal->MassColdMolecular = 0.0;
+init.c:    gal->MassColdIonized = 0.0;
+init.c:    gal->MassEject = 0;
+init.c:    gal->MetalHot = 0.0;
+init.c:    gal->MetalCold = 0.00;
+init.c:    gal->MetalStar = 0.0;
+init.c:    gal->MetalEject = 0.0;
+init.c:    gal->ConcenHalo = 10.0;
+init.c:    gal->RadiusHalo = 0.0;
+init.c:    gal->RadiusDisc = 0.00;
+init.c:    gal->RadiusHalfCold = 0.0;
+init.c:    gal->RadiusHalfStar = 0.0;
+init.c:    gal->RateStarFormation = 0.0;
+init.c:    gal->VelocityVirial = 0.0;
+init.c:    gal->SpinHalo = 0.035;
+init.c:    gal->SpinCooling = 1;
+init.c:    gal->TimeCooling = 0.0;
+init.c:    gal->RadiusInner = malloc(gal->nbin * sizeof(double));
+init.c:    gal->RadiusOuter = malloc(gal->nbin * sizeof(double));
+init.c:    gal->MassProfHalo = malloc(gal->nbin * sinzeof(double));
+init.c:    gal->SDensityCold = malloc(gal->nbin * sizeof(double));
+init.c:    gal->SDensityStar = malloc(gal->nbin * sizeof(double));
+init.c:    gal->RadiusMostOuter = 0.270; // 200kpc
+init.c:    gal->RadiusMostInner = pow(10., lgrmin) * gal->RadiusMostOuter;
+init.c:    	gal->RadiusInner[i] = pow(10., lgrmin+i*dlgr) * gal->RadiusMostOuter;
+init.c:    	gal->RadiusOuter[i] = pow(10., lgrmin+(i+1)*dlgr) * gal->RadiusMostOuter;
+init.c:    	gal->SDensityCold[i] = 0.0;
+init.c:    	gal->SDensityStar[i] = 0.0;
+init.c:    	gal->SDensityColdAtomic[i] = 0.0;
+init.c:    	gal->SDensityColdMolecular[i] = 0.0;
+init.c:	gal->SDensityMetalCold[i] = 0.0;
+init.c:	gal->SDensityMetalStar[i] = 0.0;
+init.c:	gal->MassMetalCold[i] = 0.0;
+init.c:	gal->MassMetalStar[i] = 0.0;
+init.c:	gal->MetallicityCold[i] = 0.0;
+init.c:	gal->MetallicityStar[i] = 0.0;
+init.c:    	gal->CoolingTime[i] = 0.0;
+init.c:    		gal->SDensitySFH[i][j] = 0.0;
+init.c:    	gal->TimeArray[j] = Bin_size_time * (j+0.5);
+init.c:    	gal->StarFormationHistory[j] = 0.0;
+init.c:    	//printf("init: j=%d t=%g\n", j, gal->TimeArray[j]);
+interface_likelihood.c:    p[0+ihalo*5] = log10(gal->MassHalo);
+interface_likelihood.c:    p[1+ihalo*5] = log10(gal->MassStar);
+interface_likelihood.c:    //p[2+ihalo*5] = log10(gal->MassColdAtomic/gal->MassStar);
+interface_likelihood.c:    p[2+ihalo*5] = log10(gal->MassCold/gal->MassStar);
+interface_likelihood.c:    mdust_pee = pow(10.,(0.86*log10(gal->MassStar)-1.31));
+interface_likelihood.c:    mzcold = dmax(0.0, gal->MetalCold - mdust_pee);
+interface_likelihood.c:    p[3+ihalo*5] = log10(gal->MetalCold/gal->MassCold);
+interface_likelihood.c:    p[4+ihalo*5] = log10(gal->RadiusHalfStar)+3.; //change unit to kpc from mpc
+main_run_pre_sample.c:    p[0+ihalo*5] = log10(gal->MassHalo);
+main_run_pre_sample.c:    p[1+ihalo*5] = log10(gal->MassStar);
+main_run_pre_sample.c:    p[2+ihalo*5] = log10(gal->MassColdAtomic/gal->MassStar);
+main_run_pre_sample.c:    mdust_pee = pow(10.,(0.86*log10(gal->MassStar)-1.31));
+main_run_pre_sample.c:    mzcold = dmax(0.0, gal->MetalCold - mdust_pee);
+main_run_pre_sample.c:    p[3+ihalo*5] = log10(gal->MetalCold/gal->MassCold);
+main_run_pre_sample.c:    p[4+ihalo*5] = log10(gal->RadiusHalfStar)+3.; //change unit to kpc from mpc
+model_adiabatic_contraction.c:	m = mass_profile_nfw(r/tgal->RadiusHalo, tgal->ConcenHalo);
+model_adiabatic_contraction.c:	//m = mass_profile_nfw(r/tgal->RadiusHalo, 5.0);
+model_adiabatic_contraction.c://	printf("mass_initital: %g %g %g\n", r, tgal->RadiusHalo, m);
+model_adiabatic_contraction.c:	m1 = interpolate_bipoint(tgal->RadiusOuter, tgal->MassProfCold, N_RADIUS_BIN, r, 0) / tgal->MassHalo;
+model_adiabatic_contraction.c:	m2 = interpolate_bipoint(tgal->RadiusOuter, tgal->MassProfStar, N_RADIUS_BIN, r, 0) / tgal->MassHalo;
+model_adiabatic_contraction.c:    for(i=0;i<gal->nbin;i++)
+model_adiabatic_contraction.c:    	logr = log(gal->RadiusOuter[i]);
+model_adiabatic_contraction.c:        x_low = log(gal->RadiusMostInner)-1; x_hig = log(gal->RadiusMostOuter);
+model_adiabatic_contraction.c:        //printf("adiabatic_contraction: %g %g %g %g\n", logr, root, gal->RadiusOuter[i], r_initial);
+model_adiabatic_contraction.c:        gal->MassProfDMContracted[i]= gal->MassHalo * (1. - BaryonFrac) * mass_initial(r_initial);
+model_adiabatic_contraction.c:        gal->MassProfDM[i] = gal->MassHalo * (1. - BaryonFrac) * mass_initial(gal->RadiusOuter[i]);
+model_adiabatic_contraction.c://        printf("adiabatic_contraction: %g %g %g %g %g %g\n", logr, root, gal->RadiusOuter[i], r_initial, gal->MassProfDMContracted[i], gal->MassProfDM[i]);
+model_coldgas_accretion.c:	//bar = gal->RateHaloAccretion * dt; // no real cooling calculation; the cooling rate just follows the halo accretion rate
+model_coldgas_accretion.c:	gal->RateCooling = cr;
+model_coldgas_accretion.c:	gal->MassCold += bar;
+model_coldgas_accretion.c:	gal->MassHot -= bar;
+model_coldgas_accretion.c:	sig0 = gal->MassCold/(2.*M_PI * gal->RadiusDisc * gal->RadiusDisc);
+model_coldgas_accretion.c:	nbin = gal->nbin;
+model_coldgas_accretion.c:		r = 0.5*(gal->RadiusInner[i] + gal->RadiusOuter[i]);
+model_coldgas_accretion.c:		gal->SDensityCold[i] = sig0 * exp(-r/gal->RadiusDisc);
+model_coldgas_accretion.c:		//printf("%d %g %g %g %g %g\n", i, gal->RadiusInner[i], gal->RadiusOuter[i], gal->MassProfHalo[i], gal->SDensityCold[i], gal->SDensityStar[i] );
+model_coldgas_accretion.c:	if (gal->MassHot > 0.0) zhot = gal->MetalHot/gal->MassHot;
+model_coldgas_accretion.c:	tdyn = gal->RadiusHalo*UnitLength_in_cm*1e-5/gal->VelocityVirial/UnitTime_in_Second;
+model_coldgas_accretion.c:	//cr = 0.17*gal->RateHaloAccretion;  // no real cooling calculation; the cooling rate just follows the halo accretion rate
+model_coldgas_accretion.c:	//if(z<2.01) cr = 0.0 * cr;//0.17 * Par.BaryonAccretionFraction * gal->RateHaloAccretion * do_preheating(gal, z);
+model_coldgas_accretion.c:	//hr = 5.0005*gal->RateStarFormation*(200./gal->VelocityVirial)*(200./gal->VelocityVirial);
+model_coldgas_accretion.c:	//hr = 7e-5*gal->MassStar * 130*130;// * gal->VelocityVirial * gal->VelocityVirial;
+model_coldgas_accretion.c:			hr += gal->StarFormationHistory[k] / pow(t0, 1.25);
+model_coldgas_accretion.c:		//printf("k=%d th=%g t0=%g sfr=%g\n", k, thubble, t0, gal->StarFormationHistory[k]);
+model_coldgas_accretion.c:	hr =  0.5 * 8. * hr * UnitTime_in_Megayears * 1e6 * pow(gal->VelocityVirial/30.,2);
+model_coldgas_accretion.c:	printf("t=%g vel:%g j=%d hr=%g mstar=%g\n", thubble, gal->VelocityVirial, j, hr, gal->MassStar);
+model_coldgas_accretion.c:	hr = Par.GalaxyHeatingEfficiency * gal->MassStar * pow(gal->MassStar/2e10, 1.);// * pow(gal->VelocityVirial/120.,2);// * gal->MassStar/2e10;
+model_coldgas_accretion.c:	//cr += 0.5*gal->MassCloud / tdyn;
+model_coldgas_accretion.c:	gal->MassCloud -= gal->MassCloud / tdyn * dt;
+model_coldgas_accretion.c:	gal->RateCooling = cr;
+model_coldgas_accretion.c:	gal->MassCold += bar;
+model_coldgas_accretion.c:	gal->MassHot -= bar;
+model_coldgas_accretion.c:	sig0 = bar/(2.*M_PI * gal->RadiusDisc * gal->RadiusDisc);
+model_coldgas_accretion.c:	nbin = gal->nbin;
+model_coldgas_accretion.c:		r = 0.5*(gal->RadiusInner[i] + gal->RadiusOuter[i]);
+model_coldgas_accretion.c:		gal->SDensityCold[i] += sig0 * exp(-r/gal->RadiusDisc);
+model_coldgas_accretion.c:		//printf("%d %g %g %g %g %g %g\n", i, bar, gal->RadiusInner[i], gal->RadiusOuter[i], gal->MassProfHalo[i], gal->SDensityCold[i], gal->SDensityStar[i] );
+model_coldgas_accretion.c:		//gal->MassMetalCold[i] += cr * dt * zhot * exp(-r/gal->RadiusDisc);
+model_coldgas_accretion.c:		//gal->SDensityMetalCold[i] += sig0 * zhot * exp(-r/gal->RadiusDisc);
+model_coldgas_accretion.c:		gal->MassMetalCold[i] += sig0 * exp(-r/gal->RadiusDisc) * zhot * M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_coldgas_accretion.c:		//gal->MassMetalCold[i] = gal->SDensityMetalCold[i] * M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_coldgas_accretion.c:	gal->MetalCold += cr * dt * zhot;
+model_coldgas_accretion.c:	gal->MetalHot -= cr * dt * zhot;
+model_disc_size.c:	param[0]=vhalo; param[1]=rd; param[2]=gal->RadiusHalo; param[3]=gal->MassHalo; param[4]=gal->MassStar + gal->MassCold; param[5]=gal->ConcenHalo;
+model_disc_size.c:	//printf("%g %g %g %g\n", gal->RadiusHalfCold , gal->MassCold ,gal->RadiusHalfStar, gal->MassStar);
+model_disc_size.c:		fc = fun_fc_disk(gal->ConcenHalo);
+model_disc_size.c:		lam_p = gal->SpinHalo * gal->SpinCooling;
+model_disc_size.c:		//md = (gal->MassCold + gal->MassStar) / gal->MassHalo;
+model_disc_size.c:		//fr = fun_fr_disk_approx(lam_p, md, gal->ConcenHalo); // not self-consistent when computing for newly accreted gas mass
+model_disc_size.c:		if(gal->MassCold+gal->MassStar > 0)
+model_disc_size.c:			fr = fun_fr_disk(gal->VelocityVirial, (gal->RadiusHalfCold * gal->MassCold + gal->RadiusHalfStar * gal->MassStar)/(gal->MassCold+gal->MassStar)/1.678, gal);
+model_disc_size.c:		rd = Par.DiskRadiusFactor / sqrt(2*fc) * lam_p * gal->RadiusHalo * fr;// * (1.+Redshift)/2.;
+model_disc_size.c:		rd = Par.DiskRadiusFactor * 0.03 * gal->RadiusHalo;
+model_disc_size.c:	//printf("disk: %g md=%g lam_p=%g c=%g fc=%g sc=%g\n", Redshift, md, lam_p, gal->ConcenHalo,  fc, gal->SpinCooling);
+model_halo_accretion_history.c://printf("halo_mass_profile: c=%g\n", gal->ConcenHalo);
+model_halo_accretion_history.c:	for(i=0; i<gal->nbin; i++)
+model_halo_accretion_history.c:		r = gal->RadiusInner[i] / gal->RadiusHalo;
+model_halo_accretion_history.c:		if (r <=1) gal->MassProfHalo[i] = gal->MassHalo * mass_profile_nfw(r, gal->ConcenHalo);
+model_halo_accretion_history.c:		else gal->MassProfHalo[i] = gal->MassHalo;
+model_halo_accretion_history.c:	c = 1.35 * halo_concentration_prada(z, gal->MassHalo); //convert into c_vir from c_200
+model_hotgas_accretion.c:	s_vir = gal->EntropyVirial;
+model_hotgas_accretion.c:	rate = BaryonFrac * Par.BaryonAccretionFraction * do_reionization(gal->MassHalo, z) * fhot;
+model_hotgas_accretion.c:	//printf("hot accretion: %g %g %g %g\n", do_reionization(gal->MassHalo, z), do_preheating(gal, z), rate, fhot);
+model_hotgas_accretion.c:	fhot = hot_accretion_fraction(z, gal->MassHalo);
+model_hotgas_accretion.c:	frac = BaryonFrac * Par.BaryonAccretionFraction * do_reionization(gal->MassHalo, z) * do_preheating(gal, z) * (1-fhot);
+model_hotgas_accretion.c:	p[0] = c = gal->ConcenHalo;
+model_hotgas_accretion.c:	mvir = gal->MassHalo;
+model_hotgas_accretion.c:	rvir = gal->RadiusHalo;
+model_hotgas_accretion.c:	hotgas = gal->MassHot;
+model_hotgas_accretion.c:	vvir = gal->VelocityVirial;
+model_hotgas_accretion.c:	for(i=0; i<gal->nbin; i++)
+model_hotgas_accretion.c:		r = 0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i]);
+model_hotgas_accretion.c:		if(r < gal->RadiusHalo)
+model_hotgas_accretion.c:			x = r/gal->RadiusHalo;
+model_hotgas_accretion.c:			gal->DensityProfHot[i] = den0 * gas_density_profile( x, p[0] );
+model_hotgas_accretion.c:			gal->MassProfHot[i] = 4.*M_PI*(rvir*rvir*rvir)*den0*result;
+model_hotgas_accretion.c:			//printf("int: %g %g %g %g %g\n", r, x, gal->RadiusHalo, gal->DensityProfHot[i], gal->MassProfHot[i]);
+model_hotgas_accretion.c:			gal->TemperatureProfHot[i] = t_gas * gas_temperature_profile(x, c);
+model_hotgas_accretion.c:	p[0] = z = gal->z;
+model_hotgas_accretion.c:	p[2] = c = gal->ConcenHalo;
+model_hotgas_accretion.c:	mvir = gal->MassHalo;
+model_hotgas_accretion.c:	rvir = gal->RadiusHalo;
+model_hotgas_accretion.c:	vvir = gal->VelocityVirial;
+model_hotgas_accretion.c:	rhovir = gal->MassHot / (4*M_PI*(rvir*rvir*rvir)*result);
+model_hotgas_accretion.c:	//printf("isenthermal check: %g %g\n", gal->MassHot, result);
+model_hotgas_accretion.c:	for(i=0; i<gal->nbin; i++)
+model_hotgas_accretion.c:		r = 0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i]);
+model_hotgas_accretion.c:		if(r < gal->RadiusHalo)
+model_hotgas_accretion.c:			x = r/gal->RadiusHalo;
+model_hotgas_accretion.c:			gal->DensityProfHot[i] = rhovir * gas_density_profile_isenthermal( x, p[0], p[1], p[2] );
+model_hotgas_accretion.c:			gal->MassProfHot[i] =  4.*M_PI*(rvir*rvir*rvir)*rhovir*result;
+model_hotgas_accretion.c:			gal->TemperatureProfHot[i] = t_gas * gas_temperature_profile_isenthermal(gal->DensityProfHot[i]/rhovir, z, s_ratio, c);
+model_hotgas_accretion.c:			//printf("%g %g %g %g %g %g\n", r, x, gal->DensityProfHot[i]/(rhovir * gas_density_profile_isenthermal( 1, p[0], p[1], p[2] )), gal->MassProfHot[i], gal->TemperatureProfHot[i]);
+model_hotgas_accretion.c:	    	printf("%g %g %g %g %g %g\n", r, x, gal->RadiusHalo, gal->DensityProfHot[i], gal->MassProfHot[i], gal->TemperatureProfHot[i]);
+model_hotgas_accretion.c:	vvir = gal->VelocityVirial;
+model_hotgas_accretion.c:	double params[3] = {s_ratio, beta, gal->ConcenHalo};
+model_hotgas_accretion.c:    for (i = gal->nbin-1; i >= 0; i--)
+model_hotgas_accretion.c:    	r = 0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i]);
+model_hotgas_accretion.c:    	if(r < gal->RadiusHalo)
+model_hotgas_accretion.c:    		x = r/gal->RadiusHalo;
+model_hotgas_accretion.c:    		gal->DensityProfHot[i] = rho;
+model_hotgas_accretion.c:    		gal->TemperatureProfHot[i] = gas_temperature_profile_power_law_entropy(x, rho, s_ratio, beta);
+model_hotgas_accretion.c:    		//printf("%d %g %g %g\n", i, x, rho, gal->TemperatureProfHot[i]);
+model_hotgas_accretion.c:    		gal->DensityProfHot[i] = 0.0;
+model_hotgas_accretion.c:    		gal->TemperatureProfHot[i] = 0.0;
+model_hotgas_accretion.c:    x = gal->RadiusInner[0] / gal->RadiusHalo;
+model_hotgas_accretion.c:    mass = 4 * M_PI / 3 * rho * gal->RadiusInner[0] * gal->RadiusInner[0] * gal->RadiusInner[0];
+model_hotgas_accretion.c:    for(i=0; i<gal->nbin; i++)
+model_hotgas_accretion.c:    	r = 0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i]);
+model_hotgas_accretion.c:    	mass += 4.*M_PI * gal->DensityProfHot[i] * r * r * (gal->RadiusOuter[i] - gal->RadiusInner[i]);
+model_hotgas_accretion.c:    	gal->MassProfHot[i] = mass;
+model_hotgas_accretion.c:    //gal->MassHot = dmax(gal->MassHalo * BaryonFrac * dmin(gal->MassHalo/mah_mcbride(gal->z), 1.) - (gal->MassStar+gal->MassCold), 0);
+model_hotgas_accretion.c:    //gal->MassHot = dmax(gal->MassHalo * BaryonFrac * dmin(gal->MassHalo/mah_wechsler(1./(gal->z+1)), 0.8) - (gal->MassStar+gal->MassCold), 0);
+model_hotgas_accretion.c:    //gal->MassHot = dmax(gal->MassHalo * BaryonFrac - (gal->MassStar+gal->MassCold), 0);
+model_hotgas_accretion.c:    //if(Do_preheating ) tnorm = t_gas * pow(1*gal->MassHot/mass, 2./3) * gal->EntropyVirial / gal->TemperatureVirial * factor; // when x=1 rho=1
+model_hotgas_accretion.c:    if(Do_preheating ) tnorm = pow(1*gal->MassHot/mass, 2./3) * gal->EntropyVirial * factor; // when x=1 rho=1
+model_hotgas_accretion.c:    //tnorm = t_gas * pow(1*gal->MassHot/mass, 2./3) * gal->EntropyVirial / gal->TemperatureVirial * factor; // when x=1 rho=1
+model_hotgas_accretion.c:    for(i=0; i<gal->nbin; i++)
+model_hotgas_accretion.c:    	r = 0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i]);
+model_hotgas_accretion.c:    	gal->DensityProfHot[i] *= gal->MassHot/mass;
+model_hotgas_accretion.c:    	gal->MassProfHot[i] *= gal->MassHot/mass;
+model_hotgas_accretion.c:    	gal->TemperatureProfHot[i] *= tnorm;
+model_hotgas_accretion.c:    	//printf("hot_gas: %g %g %g %g %g %g\n", r, x, gal->RadiusHalo, gal->DensityProfHot[i], gal->MassProfHot[i], gal->TemperatureProfHot[i]);
+model_hotgas_accretion.c://printf("test: %g %g %g\n", pow(rho1*gal->MassHot/mass, 2./3) ,1/( gal->EntropyVirial / gal->TemperatureVirial), factor);
+model_starformation_molecule.c:    nbin = gal->nbin;
+model_starformation_molecule.c:    reff = gal->RadiusDisc;
+model_starformation_molecule.c:    //tdyn = 1./((gal->VelocityVirial/(gal->RadiusHalo*UnitLength_in_cm/1e5)) * UnitTime_in_Second);
+model_starformation_molecule.c:    r_crit = log(gal->MassCold/(2.*M_PI*reff*reff)) - log(Par.StarFormationCriticalSurfaceDensity * 1e12);
+model_starformation_molecule.c:    if(f_sf > 0.) mass_sf = gal->MassCold * f_sf;
+model_starformation_molecule.c:    gal->MassCold -= (1.-Par.StellarMassLossFraction) * sfr * dt;
+model_starformation_molecule.c:    gal->MassStar += (1.-Par.StellarMassLossFraction) * sfr * dt;
+model_starformation_molecule.c:    gal->MassCold -= Par.SNLoadingFactor * sfr * dt;
+model_starformation_molecule.c:    gal->MassEject += Par.SNLoadingFactor * sfr *dt;
+model_starformation_molecule.c:    gal->MassColdMolecular = mass_sf - (1.-Par.StellarMassLossFraction+Par.SNLoadingFactor) * sfr *dt;
+model_starformation_molecule.c:    gal->MassColdAtomic = gal->MassCold - gal->MassColdMolecular;
+model_starformation_molecule.c:    sig0_cold = gal->MassCold/(2.*M_PI * gal->RadiusDisc * gal->RadiusDisc);
+model_starformation_molecule.c:    sig0_star = gal->MassStar/(2.*M_PI * gal->RadiusDisc * gal->RadiusDisc);
+model_starformation_molecule.c:    	f = exp(-0.5*(gal->RadiusInner[i]+gal->RadiusOuter[i])/gal->RadiusDisc);
+model_starformation_molecule.c:    	gal->SDensityCold[i] = sig0_cold * f;
+model_starformation_molecule.c:    	gal->SDensityStar[i] = sig0_star * f;
+model_starformation_molecule.c:    gal->RateStarFormation = sfr;
+model_starformation_molecule.c:    //printf("sfr=%g %g %g %g %g %g %g\n", sfr, f_sf, r_crit, reff, gal->RadiusHalo, tdyn, dt);
+model_starformation_molecule.c:    nbin = gal->nbin;
+model_starformation_molecule.c:    //tdyn = 1./((gal->VelocityVirial/(gal->RadiusHalo*UnitLength_in_cm/1e5)) * UnitTime_in_Second);
+model_starformation_molecule.c:    //if(gal->z >= 2.01) loadingfactor = 100.;
+model_starformation_molecule.c:    	dden = gal->SDensityCold[i];
+model_starformation_molecule.c:    	area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_starformation_molecule.c:    		sd_cold_tmp = gal->SDensityCold[i];
+model_starformation_molecule.c:    		//sfe_max = dden/(gal->SDensityCold[i] * (1+Par.SNLoadingFactor)*dt);
+model_starformation_molecule.c:    		gal->SDensitySFH[i][j] += sd_sfr * dt;
+model_starformation_molecule.c:    			fml += gal->SDensitySFH[i][k] *
+model_starformation_molecule.c:    					(stellar_mass_loss(t - gal->TimeArray[k]+0.5*dt) -
+model_starformation_molecule.c:    							stellar_mass_loss(t - gal->TimeArray[k]-0.5*dt));
+model_starformation_molecule.c:    		gal->SDensityStar[i] += (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
+model_starformation_molecule.c:    		gal->SDensityStar[i] -= fml;
+model_starformation_molecule.c:    		gal->SDensityCold[i] = sd_cold_tmp;
+model_starformation_molecule.c:    		mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    		mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    	mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    	mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    gal->MassCold = mcold;
+model_starformation_molecule.c:    gal->MassStar = mstar;
+model_starformation_molecule.c:    gal->MassEject += ofr * dt;
+model_starformation_molecule.c:    gal->RateStarFormation = sfr;
+model_starformation_molecule.c:	nbin = gal->nbin;
+model_starformation_molecule.c:		area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_starformation_molecule.c:		den = gal->SDensityCold[i] - si_ion * 1e12;
+model_starformation_molecule.c:		        if ((gal->SDensityCold[i]*area) > 0.0) zcold = gal->MassMetalCold[i]/(gal->SDensityCold[i]*area);
+model_starformation_molecule.c:			gal->SDensityColdMolecular[i] = gal->SDensityCold[i] * fmole;
+model_starformation_molecule.c:			gal->SDensityColdAtomic[i] = gal->SDensityCold[i] * (1-fmole);
+model_starformation_molecule.c:			matom += gal->SDensityColdAtomic[i] * area;
+model_starformation_molecule.c:			mmole += gal->SDensityColdMolecular[i] * area;
+model_starformation_molecule.c:			mion += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:		mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:		gal->MassProfStar[i] = mstar;
+model_starformation_molecule.c:		gal->MassProfCold[i] = matom + mmole + mion;
+model_starformation_molecule.c:		gal->MassProfNeutral[i] = matom + mmole;
+model_starformation_molecule.c:	gal->MassColdAtomic = matom;
+model_starformation_molecule.c:	gal->MassColdMolecular = mmole;
+model_starformation_molecule.c:	gal->MassColdIonized = mion;
+model_starformation_molecule.c:	gal->MassCold = matom + mmole + mion;
+model_starformation_molecule.c:	z= gal->z;
+model_starformation_molecule.c:	r = dmin(gal->RadiusHalfStar, gal->RadiusHalo);
+model_starformation_molecule.c:	sigma0 = gal->MassStar / (2*M_PI*r*r/1.678/1.678)/1e12;
+model_starformation_molecule.c:	r = gal->RadiusOuter[79];
+model_starformation_molecule.c:	sigma0 = gal->MassProfStar[79] / (2*M_PI*r*r/1.678/1.678)/1e12;
+model_starformation_molecule.c:	p0 = 0;// * pow(200/gal->VelocityVirial, -1);//Par.SNLoadingFactorIndex);
+model_starformation_molecule.c:	//if(Do_preheating) f = (p0+0.0*pow(gal->MassStar/2.0e10, 2)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0))); //disk paper used this
+model_starformation_molecule.c:	if(Do_preheating) //f = (p0+0.0*pow(gal->MassStar/2.0e10, 2)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
+model_starformation_molecule.c:	r = dmin(gal->RadiusHalfStar, gal->RadiusHalo);
+model_starformation_molecule.c:	sigma0 = gal->RateStarFormation / (2.*M_PI*r*r/1.678/1.678)/1e12;
+model_starformation_molecule.c:	else f = Par.SNLoadingFactor * pow(200/gal->VelocityVirial, Par.SNLoadingFactorIndex);
+model_starformation_molecule.c:	//printf("outflow: %d %g %g %g %g \n", Do_preheating, z, gal->MassStar, r, f);
+model_starformation_molecule.c:    nbin = gal->nbin;
+model_starformation_molecule.c:    	dden = gal->SDensityColdMolecular[i];
+model_starformation_molecule.c:    	//if (gal->MassHalo/mah(0.0) < 1./10) dden = gal->SDensityCold[i];   //**************************************//
+model_starformation_molecule.c:    	//if (gal->MassHalo/mah(0.0) < 2./halo_concentration_prada(0, mah(0.0))) dden = gal->SDensityCold[i];
+model_starformation_molecule.c:    	sd_cold_tmp = gal->SDensityCold[i];
+model_starformation_molecule.c:    	area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_starformation_molecule.c:	if ((sd_cold_tmp * area) > 0.0) zcold = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+model_starformation_molecule.c:    		//sd_cold_tmp = gal->SDensityCold[i];
+model_starformation_molecule.c:    		//sfe_max = dden/(gal->SDensityCold[i] * (1+Par.SNLoadingFactor)*dt);
+model_starformation_molecule.c:    		//if (gal->MassHalo/mah(0.0) < 1./10) sfe = 1./0.2; //**************************************//
+model_starformation_molecule.c:    		//if (gal->MassHalo/mah(0.0) < 2./halo_concentration_prada(0, mah(0.0))) sfe = 1./0.2;
+model_starformation_molecule.c:    		gal->SDensitySFH[i][j] += sd_sfr * dt;
+model_starformation_molecule.c:    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] *
+model_starformation_molecule.c:    					(stellar_mass_loss(t - gal->TimeArray[k]+0.5*dt) -
+model_starformation_molecule.c:    							stellar_mass_loss(t - gal->TimeArray[k]-0.5*dt));
+model_starformation_molecule.c:    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] * (stellar_mass_loss(t-gal->TimeArray[k]+0.5*Bin_size_time)-
+model_starformation_molecule.c:    							stellar_mass_loss(t-gal->TimeArray[k]-0.5*Bin_size_time));
+model_starformation_molecule.c:    			//t0 = gal->TimeArray[k];
+model_starformation_molecule.c:    			mp += gal->SDensitySFH[i][k] * (1.-stellar_mass_loss(t-gal->TimeArray[k]));
+model_starformation_molecule.c:    			//if(gal->z < 0.0001) printf("SF debug: %d %d %d %g %g %g %g\n", i, k, j, t, gal->TimeArray[k],stellar_mass_loss(t-gal->TimeArray[k]), mp);
+model_starformation_molecule.c:    		//gal->SDensityStar[i] += (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
+model_starformation_molecule.c:    		//gal->SDensityStar[i] -= fml;
+model_starformation_molecule.c:    		gal->SDensityStar[i] = mp;
+model_starformation_molecule.c:    		//loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
+model_starformation_molecule.c://printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
+model_starformation_molecule.c:    		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
+model_starformation_molecule.c:    		gal->SDensitySFR[i] = sd_sfr / dt;
+model_starformation_molecule.c:    		mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    		mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    	mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    	mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
+model_starformation_molecule.c:    gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
+model_starformation_molecule.c:    // gal->MassMetalHot[i] += sdr_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot; //Assumes hot mass deposited at location of star formation
+model_starformation_molecule.c:    //if ((sd_cold_tmp * area) > 0.0) zcoldglobal = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+model_starformation_molecule.c:    gal->MetalStar += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
+model_starformation_molecule.c:    gal->MetalCold += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
+model_starformation_molecule.c:    gal->MetalHot += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot;
+model_starformation_molecule.c:    gal->MetalEject += sd_ofr * area / dt * dt * zcold + sd_sfr *area * dt * Par.Yield * Par.ZFractionYieldToEject;
+model_starformation_molecule.c:    //printf("debug_star_formation3: %g %g %g %g\n", t, gal->MetalCold, gal->MassMetalCold[i], coldadd);
+model_starformation_molecule.c:    gal->MassCold = mcold;
+model_starformation_molecule.c:    gal->MassStar = mstar;
+model_starformation_molecule.c:    gal->MassEject += ofr * dt * (1.-Par.MassFractionEjectToHot);
+model_starformation_molecule.c:    gal->RateStarFormation = sfr;
+model_starformation_molecule.c:    gal->StarFormationHistory[j] += sfr * dt;
+model_starformation_molecule.c:    gal->RateOutflow = ofr;
+model_starformation_molecule.c:    //printf("SF:%g %g %g %g %g %g\n", gal->MassCold, gal->MassStar, gal->MetalCold, gal->MetalStar, sfr, ofr);
+model_starformation_molecule.c:	vmax = gal->VelocityMax;
+model_starformation_molecule.c:	vmax = gal->VelocityMax;
+model_starformation_molecule.c:	vvir = gal->VelocityVirial;
+model_starformation_molecule.c:    nbin = gal->nbin;
+model_starformation_molecule.c:    	dden = gal->SDensityColdMolecular[i];
+model_starformation_molecule.c:    	sd_cold_tmp = gal->SDensityCold[i];
+model_starformation_molecule.c:    	area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+model_starformation_molecule.c:	if ((sd_cold_tmp * area) > 0.0) zcold = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+model_starformation_molecule.c:    		//sd_cold_tmp = gal->SDensityCold[i];
+model_starformation_molecule.c:    		//sfe_max = dden/(gal->SDensityCold[i] * (1+Par.SNLoadingFactor)*dt);
+model_starformation_molecule.c:    		gal->SDensitySFH[i][j] += sd_sfr * dt;
+model_starformation_molecule.c:    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] *
+model_starformation_molecule.c:    					(stellar_mass_loss(t - gal->TimeArray[k]+0.5*dt) -
+model_starformation_molecule.c:    							stellar_mass_loss(t - gal->TimeArray[k]-0.5*dt));
+model_starformation_molecule.c:    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] * (stellar_mass_loss(t-gal->TimeArray[k]+0.5*Bin_size_time)-
+model_starformation_molecule.c:    							stellar_mass_loss(t-gal->TimeArray[k]-0.5*Bin_size_time));
+model_starformation_molecule.c:    			//t0 = gal->TimeArray[k];
+model_starformation_molecule.c:    			mp += gal->SDensitySFH[i][k] * (1.-stellar_mass_loss(t-gal->TimeArray[k]));
+model_starformation_molecule.c:    		//gal->SDensityStar[i] += (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
+model_starformation_molecule.c:    		//gal->SDensityStar[i] -= fml;
+model_starformation_molecule.c:    		gal->SDensityStar[i] = mp;
+model_starformation_molecule.c:    		//loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
+model_starformation_molecule.c://printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
+model_starformation_molecule.c:    		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
+model_starformation_molecule.c:    		gal->SDensitySFR[i] = sd_sfr / dt;
+model_starformation_molecule.c:    		mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    		mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    	mstar += gal->SDensityStar[i] * area;
+model_starformation_molecule.c:    	mcold += gal->SDensityCold[i] * area;
+model_starformation_molecule.c:    gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
+model_starformation_molecule.c:    gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
+model_starformation_molecule.c:    // gal->MassMetalHot[i] += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot + sd_ofr_reheat * area * dt * zcold //assumes hot metals deposited locally
+model_starformation_molecule.c:    //gal->MetalStar += sfr * dt * zcold * (1-Par.StellarMassLossFraction);
+model_starformation_molecule.c:    gal->MetalStar += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
+model_starformation_molecule.c:    gal->MetalCold += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
+model_starformation_molecule.c:    gal->MetalHot += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot + sd_ofr_reheat * area / dt * dt * zcold;
+model_starformation_molecule.c:    gal->MetalEject += sd_ofr_eject * area / dt * dt * zcold + sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToEject;
+model_starformation_molecule.c:    gal->MassCold = mcold;
+model_starformation_molecule.c:    gal->MassStar = mstar;
+model_starformation_molecule.c:    gal->MassEject += ofr_eject * dt;
+model_starformation_molecule.c:    gal->RateStarFormation = sfr;
+model_starformation_molecule.c:    gal->RateOutflow = ofr_reheat + ofr_eject;
+model_starformation_molecule.c:	if (gal->MassEject > 1e-33) zeject = gal->MetalEject / gal->MassEject;
+model_starformation_molecule.c:	trein = reioncorporation_model_henriques2013(gal->MassHalo);
+model_starformation_molecule.c:	dm = dmin(gal->MassEject * dt / trein, gal->MassEject);
+model_starformation_molecule.c:	gal->MassEject -= dm;
+model_starformation_molecule.c:	gal->MetalEject -= dm * zeject;
+model_starformation_molecule.c:	gal->MetalHot += dm * zeject;
