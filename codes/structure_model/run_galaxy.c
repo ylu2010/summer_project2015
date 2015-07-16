@@ -28,10 +28,10 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
 int Do_preheating = 0;
-int Do_reinfall = 1;
-int N_halo = 1;
+int Do_reinfall = 0;
+int N_halo = 11;
 float Mass_bin = 1.0;
-float LogHaloMassArray[9]={12.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0};
+float LogHaloMassArray[11]={10.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Write_pred_file=1;
 int Write_pred_saparately=0;
 int Write_hist_file=1;
@@ -67,7 +67,7 @@ int setup_run(void)
 	if ( Do_preheating)
 	{
 		Par.PreheatEntropySlope = 0.2;
-		Par.PreheatEntropy = 12;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
+		Par.PreheatEntropy = 10;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
 		Par.EntropyProfileIndex = 0.0;
 		Par.DiskRadiusFactor = 0.7;
 		Par.ZFractionYieldToEject = 0.0;// for PR model
@@ -180,7 +180,7 @@ void init_file(void)
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin\n");
+		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin RadiusIso\n");
 	}
 
 	//printf("done init_file\n");
