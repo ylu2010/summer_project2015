@@ -36,6 +36,7 @@ int Write_pred_file=1;
 int Write_pred_saparately=0;
 int Write_hist_file=1;
 int Write_prof_file=1;
+int Write_snap_file=1;
 double Redshift;
 double Redshift_end=0.0;
 
@@ -45,6 +46,7 @@ FILE *fp_hist;
 FILE *fp_pred;
 FILE *fp_disc;
 FILE *fp_list;
+FILE *fp_snap;
 
 int setup_run(void)
 {
@@ -165,6 +167,7 @@ void init_file(void)
 	char fname_pred[200];
 	char fname_hist[200];
 	char fname_disc[200];
+    char fname_snap[200];
 
 	sprintf(fname_pred, "sample_z%3.1f.dat", Redshift_end);
 	fp_list=fopen("list.dat","w");
@@ -183,6 +186,14 @@ void init_file(void)
 		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin RadiusIso\n");
 	}
 
+    {
+        sprintf(fname_snap, "snap.dat");
+        fp_snap=fopen(fname_snap,"w");
+        fprintf(fp_snap, "#z i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter SDensitySFR  MetallicityCold MetallicityStar MassProfStar MassStar MassBin RadiusIso\n");
+    }
+ 
+    
+
 	//printf("done init_file\n");
 }
 
@@ -192,4 +203,5 @@ void close_file(void)
 	fclose(fp_list);
 	fclose(fp_hist);
 	fclose(fp_disc);
+    fclose(fp_snap);
 }

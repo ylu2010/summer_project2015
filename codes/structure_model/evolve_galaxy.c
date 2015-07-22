@@ -204,6 +204,17 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
 				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
 		}
+        /*
+        if(Write_snap_file && z<=3.1 && fmod(z,0.5)<0.001)
+        {
+            struct galaxytemp *galtemp = malloc(sizeof(struct galaxy));
+            memcpy(galtemp, gal, sizeof *gal);
+            print_snapshot(gal, z, thubble, dt, mh);
+            gal = galtemp;
+            free(galtemp);
+        }
+        */
+        
 		z -= dz;
 		Redshift = z;
 		mh += dmh;
@@ -247,7 +258,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
     halo_adjust(gal,z,mh);
     cold_gas_accretion_surface(gal, thubble, dt);
     disc_mass_composition(gal);
-    
+    sig_metal_calc(gal);
+    /*
     //Calculating SDensity for Metals
     int i;
     double area;
@@ -264,6 +276,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
                   gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
               else gal->MetallicityStar[i] = 0.0;
           }
+     */
     
 	if(Write_prof_file) print_galaxy(gal);
 }
@@ -288,6 +301,25 @@ void halo_adjust(struct galaxy *gal, double z, double mh)
     //printf("%g\n",rho);
 }
 
+void sig_metal_calc(struct galaxy *gal)
+{
+    int i;
+    double area;
+    for(i=0; i<gal->nbin; i++)
+		  {
+              area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+              gal->SDensityMetalCold[i] = (gal->MassMetalCold[i])/area;
+              gal->SDensityMetalStar[i] = (gal->MassMetalStar[i])/area;
+              //Calculating Metallicity
+              if (gal->SDensityCold[i] > 0.0)
+                  gal->MetallicityCold[i] = gal->SDensityMetalCold[i]/gal->SDensityCold[i];
+              else gal->MetallicityCold[i] = 0.0;
+              if (gal->SDensityStar[i] > 0.0)
+                  gal->MetallicityStar[i] = gal->SDensityMetalStar[i]/gal->SDensityStar[i];
+              else gal->MetallicityStar[i] = 0.0;
+          }
+}
+
 void print_galaxy(struct galaxy *gal)
 {
 	int i;
@@ -301,3 +333,25 @@ void print_galaxy(struct galaxy *gal)
 			        gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin, (gal->RadiusInner[i]/gal->RadiusHalfStar));
 	}
 }
+
+
+void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, double mh)
+{
+    halo_adjust(gal,z,mh);
+    cold_gas_accretion_surface(gal, thubble, dt);
+    disc_mass_composition(gal);
+    sig_metal_calc(gal);
+    
+    int i;
+    for(i=0; i<gal->nbin; i++)
+    {
+        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+            z,i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12,
+            (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12,
+            (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3,
+            gal->SDensitySFR[i], gal->MetallicityCold[i],
+            gal->MetallicityStar[i], gal->MassProfStar[i],gal->MassStar,
+            gal->MassBin, (gal->RadiusInner[i]/gal->RadiusHalfStar));
+    }
+}
+
