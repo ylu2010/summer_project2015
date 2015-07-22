@@ -122,10 +122,12 @@ extern FILE *fp_hist;
 extern FILE *fp_disc;
 extern FILE *fp_pred;
 extern FILE *fp_list;
+extern FILE *fp_snap;
 
 extern int Write_pred_file;
 extern int Write_hist_file;
 extern int Write_prof_file;
+extern int Write_snap_file;
 
 struct interval
 {
