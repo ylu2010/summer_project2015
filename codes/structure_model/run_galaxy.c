@@ -183,13 +183,13 @@ void init_file(void)
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin RadiusIso\n");
+		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin RadiusIso\n");
 	}
 
     {
         sprintf(fname_snap, "snap.dat");
         fp_snap=fopen(fname_snap,"w");
-        fprintf(fp_snap, "#z i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter SDensitySFR  MetallicityCold MetallicityStar MassProfStar MassStar MassBin RadiusIso\n");
+        fprintf(fp_snap, "#z i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter SDensitySFR  SDensityOFR SDensityCAR MetallicityCold MetallicityStar MassProfStar MassStar MassBin RadiusIso\n");
     }
  
     
