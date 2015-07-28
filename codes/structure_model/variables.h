@@ -112,6 +112,7 @@ struct galaxy
     double SDensityStar[N_RADIUS_BIN];
     double SDensitySFR[N_RADIUS_BIN];
 	double SDensityOFR[N_RADIUS_BIN];
+    double SDensityCAR[N_RADIUS_BIN];//Cold gas accretion rate
     double TimeArray[N_TIME_BIN];
     double StarFormationHistory[N_TIME_BIN]; // stellar mass formed in a time interval
     double SDensitySFH[N_RADIUS_BIN][N_TIME_BIN];

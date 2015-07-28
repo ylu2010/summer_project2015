@@ -204,7 +204,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
 				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
 		}
-        /*
+        
         if(Write_snap_file && z<=3.1 && fmod(z,0.5)<0.001)
         {
             struct galaxytemp *galtemp = malloc(sizeof(struct galaxy));
@@ -213,7 +213,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
             gal = galtemp;
             free(galtemp);
         }
-        */
+        
         
 		z -= dz;
 		Redshift = z;
@@ -325,10 +325,10 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
 				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12),
 			        (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i],
-			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i], gal->SDensityOFR[i], 
+			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
 			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
 			        gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin, (gal->RadiusInner[i]/gal->RadiusHalfStar));
 	}
@@ -345,13 +345,14 @@ void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, doub
     int i;
     for(i=0; i<gal->nbin; i++)
     {
-        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
             z,i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12,
             (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12,
             (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3,
-            gal->SDensitySFR[i], gal->MetallicityCold[i],
-            gal->MetallicityStar[i], gal->MassProfStar[i],gal->MassStar,
-            gal->MassBin, (gal->RadiusInner[i]/gal->RadiusHalfStar));
+            gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
+            gal->MetallicityCold[i], gal->MetallicityStar[i],
+            gal->MassProfStar[i], gal->MassStar, gal->MassBin,
+            (gal->RadiusInner[i]/gal->RadiusHalfStar));
     }
 }
 
