@@ -27,7 +27,7 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 0;
+int Do_preheating = 1;
 int Do_reinfall = 0;
 int N_halo = 11;
 float Mass_bin = 1.0;
@@ -71,10 +71,10 @@ int setup_run(void)
 		Par.PreheatEntropySlope = 0.2;
 		Par.PreheatEntropy = 10;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
 		Par.EntropyProfileIndex = 0.0;
-		Par.DiskRadiusFactor = 0.7;
+		Par.DiskRadiusFactor = 1.1;
 		Par.ZFractionYieldToEject = 0.0;// for PR model
 		Par.ZFractionYieldToHot = 0.1;  // for PR model
-		Par.GalaxyHeatingEfficiency = 1.;//1.1;
+		Par.GalaxyHeatingEfficiency = 0.1;//1.1;
 		Par.SNLoadingFactor= 1;
 		Par.SNLoadingFactorIndex = 0.;
 	}
@@ -83,7 +83,7 @@ int setup_run(void)
 		Par.PreheatEntropySlope = 0.;
 		Par.PreheatEntropy = 0.0;
 		Par.EntropyProfileIndex = 1.1;//4./3;
-		Par.DiskRadiusFactor = 0.8;    // for EJ model
+		Par.DiskRadiusFactor = 1.2;    // for EJ model
 		Par.ZFractionYieldToEject = 0.;// for EJ model
 		Par.ZFractionYieldToHot = 0.1;  // for EJ model
 		Par.GalaxyHeatingEfficiency = 0.;
@@ -91,7 +91,7 @@ int setup_run(void)
 		Par.SNLoadingFactorIndex = 2;
 		if (Do_reinfall)
 		{
-			Par.DiskRadiusFactor = 0.5;  // for RI model
+			Par.DiskRadiusFactor = 0.6;  // for RI model
 			Par.ZFractionYieldToEject = 0.;
 			Par.ZFractionYieldToHot = 0.;
 		}
@@ -153,7 +153,7 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 			fprintf(fp_pred, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
 			gal.MassHalo, gal.RadiusHalo*1e3, gal.VelocityVirial, gal.MassStar, gal.RadiusHalfStar*1e3, gal.MassCold, gal.MassColdAtomic, gal.RateStarFormation, gal.MassHot, gal.MassEject, gal.MetalHot, gal.MetalCold, gal.MetalStar, gal.MetalEject);
 
-		printf("Mvir=%g M*=%g R*=%g Mc=%g Mh=%g S_vir=%g S_ph=%g f_spin=%g\n", gal.MassHalo, gal.MassStar, gal.RadiusHalfStar*1e3,gal.MassCold, gal.MassHot, gal.EntropyVirial, Par.PreheatEntropy, Par.DiskRadiusFactor);
+		printf("z=%g Mvir=%g M*=%g R*=%g Mc=%g Mh=%g S_vir=%g S_ph=%g f_spin=%g\n", gal.z, gal.MassHalo, gal.MassStar, gal.RadiusHalfStar*1e3,gal.MassCold, gal.MassHot, gal.EntropyVirial, Par.PreheatEntropy, Par.DiskRadiusFactor);
 
 		set_predictions(preds, npreds, &gal, ihalo);
 	}

@@ -204,16 +204,15 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
 				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
 		}
-        
+       
         if(Write_snap_file && z<=3.1 && fmod(z,0.5)<0.001)
         {
             struct galaxytemp *galtemp = malloc(sizeof(struct galaxy));
             memcpy(galtemp, gal, sizeof *gal);
-            print_snapshot(gal, z, thubble, dt, mh);
-            gal = galtemp;
+			print_snapshot(galtemp, z, thubble, dt, mh);
             free(galtemp);
         }
-        
+       
         
 		z -= dz;
 		Redshift = z;
