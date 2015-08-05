@@ -123,7 +123,7 @@ double disk_radius(struct galaxy *gal)
 			fr = fun_fr_disk(gal->VelocityVirial, (gal->RadiusHalfCold * gal->MassCold + gal->RadiusHalfStar * gal->MassStar)/(gal->MassCold+gal->MassStar)/1.678, gal);
 		else
 			fr = 1;
-			*/
+*/
 			fr = 1.0;
 		rd = Par.DiskRadiusFactor / sqrt(2*fc) * lam_p * gal->RadiusHalo * fr;// * (1.+Redshift)/2.;
 	}
