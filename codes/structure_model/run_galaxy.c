@@ -27,7 +27,7 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 1;
+int Do_preheating = 0;
 int Do_reinfall = 0;
 int N_halo = 11;
 float Mass_bin = 1.0;
@@ -183,7 +183,7 @@ void init_file(void)
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassBin RadiusIso\n");
+		fprintf(fp_disc, "#i RadiusInner SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic RadiusOuter MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassBin RadiusIso\n");
 	}
 
     {

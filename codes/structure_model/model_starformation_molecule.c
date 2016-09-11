@@ -410,7 +410,7 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
 //printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
 //exit(0);
     		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
-    		gal->SDensitySFR[i] = sd_sfr / dt;
+            gal->SDensitySFR[i] = sd_sfr / dt;
 			gal->SDensityOFR[i] = sd_ofr / dt;
     		sfr += sd_sfr * area; //if global metallicity calculated in loop, is this necessary?
     		ofr += sd_ofr * area /dt; //if global metallicity calculated in loop, is this necessary?
@@ -611,7 +611,7 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 //printf("debug: %d %g %g %g %g %g %g %g\n", i, gal->z, loadingfactor_reheat, loadingfactor_eject, sd_sfr, dt, (loadingfactor_reheat+loadingfactor_eject) * sd_sfr * dt, sd_cold_tmp);
 //exit(0);
     		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
-    		gal->SDensitySFR[i] = sd_sfr / dt;
+            gal->SDensitySFR[i] = sd_sfr;// / dt;
 			gal->SDensityOFR[i] = (sd_ofr_reheat + sd_ofr_eject) ;
     		sfr += sd_sfr * area; //necessary if global metallicity calculation is in loop?
     		ofr_reheat += sd_ofr_reheat * area /dt;  //necessary if global metallicity calculation is in loop?
