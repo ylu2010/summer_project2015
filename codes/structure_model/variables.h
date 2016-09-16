@@ -21,6 +21,7 @@ extern int Mah_simu;
 extern int Do_preheating;
 extern int Do_reinfall;
 extern float Mass_bin;
+extern int Resize_radius_bins;
 extern double Redshift;
 extern double Redshift_end;
 extern double Bin_size_time;

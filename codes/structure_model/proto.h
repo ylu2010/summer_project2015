@@ -23,6 +23,7 @@ int finalize_run(void);
 
 
 void init(struct galaxy *gal);
+//void resize_radius_bins(struct galaxy *gal);
 
 void cold_gas_accretion(struct galaxy *gal, double t, double dt);
 void cold_gas_accretion_surface(struct galaxy *gal, double t, double dt);
