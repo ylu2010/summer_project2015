@@ -27,9 +27,10 @@ int set_varying_parameters(double *params, int nparams)
 		Par.SNLoadingFactor = params[0];
 		Par.SNLoadingFactorIndex = params[1];
 	}
-    Par.GalaxyHeatingEfficiency = params[2];
-    Par.Yield = params[3];
-    Par.ZFractionYieldToHot = params[4];
+    //Par.GalaxyHeatingEfficiency = params[2];
+    //Par.Yield = params[3];
+    //Par.ZFractionYieldToHot = params[4];
+	Par.DiskRadiusFactor = params[2];
 
 	return 0;
 }
@@ -74,9 +75,9 @@ int general_parameter_sample(int nparams, int point_num, struct interval *param_
 
 int main( int argc, const char* argv[] )
 {
-	int nparams = 5;
+	int nparams = 3;
 	int npreds = 5*2;
-	int point_num = 5;
+	int point_num = 300;
 	int seed = 17;
 	int ihalo = 0;
 	int mode, write_pred_saparately;
@@ -104,15 +105,11 @@ int main( int argc, const char* argv[] )
     	printf("In the sampling mode... The code is generating parameter samples with a random seed=%d...\n\n", seed);
 
     	param_interval[0].min = 0.0;
-    	param_interval[0].max = 1.0;
+    	param_interval[0].max = 10.0;
     	param_interval[1].min = 0.0;
-    	param_interval[1].max = 3.0;
+    	param_interval[1].max = 4.0;
     	param_interval[2].min = 0.0;
     	param_interval[2].max = 1.0;
-    	param_interval[3].min = 0.01;
-    	param_interval[3].max = 0.05;
-    	param_interval[4].min = 0.0;
-    	param_interval[4].max = 1.0;
     	if(!(  fp=fopen("param_range.txt","w")))
     	{
     		printf("I can not open the file param_range.txt.");
@@ -165,12 +162,18 @@ int main( int argc, const char* argv[] )
 
     setup_run();
 
+	fp_list=fopen("list.dat","w");
+
     for(irun=0; irun<point_num; irun++)
     {
+		fprintf(fp_list, "%d ", irun);
     	for(iparam=0; iparam<nparams; iparam++)
     	{
     		params[iparam] = p[irun*nparams+iparam];
+			fprintf(fp_list, "%f ", params[iparam]);
     	}
+		fprintf(fp_list, "\n");
+
     	run_galaxy(params, nparams, preds, npreds, mode=0, irun);
     }
     finalize_run();
@@ -179,6 +182,7 @@ int main( int argc, const char* argv[] )
     free(params);
     free(p);
     free(param_interval);
+	fclose(fp_list);
 
     return 0;
 }

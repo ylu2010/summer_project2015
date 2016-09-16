@@ -71,7 +71,7 @@ void hot_gas_profile_power_law_entropy ( struct galaxy *gal );
 
 double disk_radius(struct galaxy *gal);
 
-void init_file(void);
+void init_file(int irun);
 void close_file(void);
 
 void sig_metal_calc(struct galaxy *gal);
