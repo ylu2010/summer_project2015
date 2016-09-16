@@ -27,16 +27,16 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 1;
+int Do_preheating = 0;
 int Do_reinfall = 0;
-int N_halo = 11;
-float Mass_bin = 1.0;
-float LogHaloMassArray[11]={10.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
+int N_halo = 1;
+float Mass_bin = 12.0;
+float LogHaloMassArray[11]={12.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Write_pred_file=1;
 int Write_pred_saparately=0;
-int Write_hist_file=1;
-int Write_prof_file=1;
-int Write_snap_file=1;
+int Write_hist_file=0;
+int Write_prof_file=0;
+int Write_snap_file=0;
 double Redshift;
 double Redshift_end=0.0;
 
@@ -105,12 +105,9 @@ int setup_run(void)
 
 	read_cooling_function();
 
-	init_random_number_gstructure();
-
 	if (Mah_simu) N_halo = read_simu_mah();
 
 	printf("check in Main: Mah_sim=%d Metal_gas_evolu=%d N_halo=%d\n", Mah_simu, Metal_gas_evolu, N_halo);
-	init_file();
 
 	return 0;
 }
@@ -119,8 +116,7 @@ int finalize_run(void)
 {
 	free_cooling_table();
 	if(Mah_simu) free_simu_mah();
-	free_random_number_gstructure();
-	close_file();
+
 	return 0;
 }
 
@@ -131,7 +127,11 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 	struct galaxy gal;
 	char fname_pred[200];
 
+	init_file(irun);
+
 	set_varying_parameters(params, nparams);
+
+	init_random_number_gstructure();
 
 	if(Write_pred_file && Write_pred_saparately)
 	{
@@ -159,18 +159,20 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 	}
 
 	if(Write_pred_file && Write_pred_saparately) fclose(fp_pred);
+
+	close_file();
+	free_random_number_gstructure();
 	return 0;
 }
 
-void init_file(void)
+void init_file(int irun)
 {
 	char fname_pred[200];
 	char fname_hist[200];
 	char fname_disc[200];
     char fname_snap[200];
 
-	sprintf(fname_pred, "sample_z%3.1f.dat", Redshift_end);
-	fp_list=fopen("list.dat","w");
+	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
 	fp_pred=fopen(fname_pred, "w");
 
 
@@ -200,7 +202,6 @@ void init_file(void)
 void close_file(void)
 {
 	fclose(fp_pred);
-	fclose(fp_list);
 	fclose(fp_hist);
 	fclose(fp_disc);
     fclose(fp_snap);
