@@ -160,14 +160,19 @@ void evolve_galaxy(struct galaxy *gal, int mode)
          */
 
 
-
-		if(Do_reinfall)
+		switch(Star_formation_model)
 		{
-			star_formation_surface_molecule_with_guo2011_feedback(gal, thubble+0.5*dt, dt); // a model mimicking the feedback model of Guo et al. 2011
-			ejected_gas_reincorporation(gal, thubble+0.5*dt, dt);
+			case 1:
+				star_formation_surface_molecule(gal, thubble+0.5*dt, dt); // the model used in the preheating paper
+				break;
+			case 2:
+				star_formation_surface_molecule_with_guo2011_feedback(gal, thubble+0.5*dt, dt); // a model mimicking the feedback model of Guo et al. 2011
+				break;
+			default:
+                printf("You did not choose an appropriate SF model!\n");
+                exit(0);
 		}
-		else
-			star_formation_surface_molecule(gal, thubble+0.5*dt, dt); // the model used in the preheating paper
+		if(Do_reinfall) ejected_gas_reincorporation(gal, thubble+0.5*dt, dt);
 
 		////star_formation_surface_limit(gal, dt);
 

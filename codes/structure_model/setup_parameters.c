@@ -39,6 +39,10 @@ void read_parameter_file(char *fname)
     strcpy(tag[nt], "Do_reinfall");
     add[nt] = &Do_reinfall;
     id[nt++] = INT;
+
+	strcpy(tag[nt], "Star_formation_model");
+	add[nt] = &Star_formation_model;
+	id[nt++] = INT;
     
     strcpy(tag[nt], "Redshift_end");
     add[nt] = &Redshift_end;

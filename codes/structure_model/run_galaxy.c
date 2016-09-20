@@ -28,7 +28,8 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
 int Do_preheating = 0;
-int Do_reinfall = 0;
+int Star_formation_model = 1;
+int Do_reinfall = 1;
 int N_halo = 1;
 float Mass_bin = 12.0;
 float LogHaloMassArray[11]={12.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
@@ -65,6 +66,7 @@ int setup_run(void)
 	Par.Yield = 0.03;
 
 	Par.MassFractionEjectToHot = 0.0;
+	Par.ReincorporationTimeScale = 1e33;
 
 	if ( Do_preheating)
 	{
@@ -91,7 +93,8 @@ int setup_run(void)
 		Par.SNLoadingFactorIndex = 2;
 		if (Do_reinfall)
 		{
-			Par.DiskRadiusFactor = 0.6;  // for RI model
+			//Par.DiskRadiusFactor = 0.6;  // for RI model
+			Par.ReincorporationTimeScale = 18.0; 
 			Par.ZFractionYieldToEject = 0.;
 			Par.ZFractionYieldToHot = 0.;
 		}
