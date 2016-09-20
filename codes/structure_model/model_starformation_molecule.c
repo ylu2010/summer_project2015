@@ -654,13 +654,14 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 
 }
 
-double reioncorporation_model_henriques2013(double mvir)
+double reincorporation_model_henriques2013(double mvir)
 {
 	double t0 = 18.0; // in Gyr
 	double m0 = 1e10; // in Msun
 	double t;
 
-	t = t0 * m0 / mvir;
+	//t = t0 * m0 / mvir;
+	t = Par.ReincorporationTimeScale * m0 / mvir;
 	return t;
 }
 
@@ -671,7 +672,7 @@ void ejected_gas_reincorporation(struct galaxy *gal, double t, double dt)
 	if (gal->MassEject > 1e-33) zeject = gal->MetalEject / gal->MassEject;
 	else zeject = 0.0;
 
-	trein = reioncorporation_model_henriques2013(gal->MassHalo);
+	trein = reincorporation_model_henriques2013(gal->MassHalo);
 
 	dm = dmin(gal->MassEject * dt / trein, gal->MassEject);
 
