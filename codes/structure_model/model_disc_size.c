@@ -135,6 +135,11 @@ double disk_radius(struct galaxy *gal)
 	return rd;
 }
 
+double disk_radius_simple(struct galaxy *gal)
+{
+	double rd = Par.DiskRadiusFactor * 0.03 * gal->RadiusHalo;
+	return rd;
+}
 
 /*
 

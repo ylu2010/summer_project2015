@@ -19,9 +19,13 @@ from matplotlib.mlab import griddata
 from matplotlib.ticker import MaxNLocator
 
 
+rname = 'pr'
+
 mname = 'm12'
 rundir = "/Users/luyu/project/disc_metal/data/"+mname+"/ihs_run2/"
-rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
+#rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
+
+rundir = "/Users/luyu/project/summer_project2015/results/model_"+rname+"_lhc/"+mname+'/'
 nfiles = 600
 ndim = 4
 Hubble_h =0.7
@@ -63,8 +67,12 @@ p = np.transpose(data[:,1:])
 #     Par.SNLoadingFractionToHot = params[3];
 #     Par.ZFractionYieldToEject = params[4];
 #    Par.ZFractionYieldToHot = params[5];
-pname0 = r'$\alpha_{LD}$'
-pname1 = r'$\beta_{LD}$'
+if rname == 'ej':
+    pname0 = r'$\alpha_{LD}$'
+    pname1 = r'$\beta_{LD}$'
+if rname == 'pr':
+    pname0 = r'log $M_{PR}$'
+    pname1 = r'$\gamma_{PR}$'
 pname2 = r'$\mu_{\lambda}$'
 pname3 = r'$\tau_{RI}$'
 pname4 = r'$\eta_{Z, EJ}$'
@@ -202,7 +210,7 @@ bool_mcold = (mcold_vec >= mcold_min) & (mcold_vec <= mcold_max)
 #bool_mzcold = (mzcold_vec >= mzcold_min) & (mzcold_vec <= mzcold_max)
 #bool_mhot = (mhot_vec >= mhot_min) & (mhot_vec <= mhot_max)
 #bool_mzhot = (mzhot_vec >= mzhot_min) & (mzhot_vec <= mzhot_max)
-bool_rstar = (interp1d(lgsm_rd_obs, lgrdlo_obs)(np.log10(mstar_vec)) < np.log10(rstar_vec)) & (interp1d(lgsm_rd_obs, lgrdup_obs)(np.log10(mstar_vec)) > np.log10(rstar_vec))
+bool_rstar = (interp1d(lgsm_rd_obs, lgrdlo_obs, fill_value='extrapolate')(np.log10(mstar_vec)) < np.log10(rstar_vec)) & (interp1d(lgsm_rd_obs, lgrdup_obs, fill_value='extrapolate')(np.log10(mstar_vec)) > np.log10(rstar_vec))
 
 #isel = np.where(bool_mstar & bool_mcold & bool_mhot)[0]  
 isel = np.where(bool_mstar & bool_rstar)[0]
@@ -238,7 +246,7 @@ for i in range(ndim):
 #ndim = 6
 fpdf = rundir+'/figs/test_rstar_'+mname+'.pdf'
 ################################################
-font = {'family' : 'normal',
+font = {'family' : 'serif',
         'weight' : 'normal',
         'size'   : 16}
 matplotlib.rc('font', **font)

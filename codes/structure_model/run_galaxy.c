@@ -27,7 +27,7 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 0;
+int Do_preheating = 1;
 int Star_formation_model = 1;
 int Do_reinfall = 1;
 int N_halo = 1;
@@ -68,6 +68,8 @@ int setup_run(void)
 	Par.MassFractionEjectToHot = 0.0;
 	Par.ReincorporationTimeScale = 1e33;
 
+	Par.PreventionMassIndex = 3.0;
+
 	if ( Do_preheating)
 	{
 		Par.PreheatEntropySlope = 0.2;
@@ -76,7 +78,7 @@ int setup_run(void)
 		Par.DiskRadiusFactor = 1.1;
 		Par.ZFractionYieldToEject = 0.0;// for PR model
 		Par.ZFractionYieldToHot = 0.1;  // for PR model
-		Par.GalaxyHeatingEfficiency = 0.1;//1.1;
+		Par.GalaxyHeatingEfficiency = 0.0;//1.1;
 		Par.SNLoadingFactor= 1;
 		Par.SNLoadingFactorIndex = 0.;
 	}

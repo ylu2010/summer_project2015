@@ -19,8 +19,11 @@ int set_varying_parameters(double *params, int nparams)
 {
 	if(Do_preheating)
 	{
-		Par.PreheatEntropy = params[0];
-		Par.PreheatEntropySlope = params[1];
+		Par.PreventionMassScale = pow(10., params[0]);
+		Par.PreventionRedshift = params[1];
+		Par.SNLoadingFactor = 5.0;
+        Par.SNLoadingFactorIndex = 2.0;
+		Par.PreheatEntropy = 0.1;
 	}
 	else
 	{
@@ -105,10 +108,20 @@ int main( int argc, const char* argv[] )
     	seed = atoi(argv[2]);
     	printf("In the sampling mode... The code is generating parameter samples with a random seed=%d...\n\n", seed);
 
-    	param_interval[0].min = 0.0;
-    	param_interval[0].max = 10.0;
-    	param_interval[1].min = 0.0;
-    	param_interval[1].max = 4.0;
+		if(Do_preheating)
+		{
+			param_interval[0].min = 10.0;
+        	param_interval[0].max = 12.0;
+        	param_interval[1].min = -2.0;
+        	param_interval[1].max = 2.0;
+		}
+		else
+		{
+    		param_interval[0].min = 0.0;
+    		param_interval[0].max = 10.0;
+    		param_interval[1].min = 0.0;
+    		param_interval[1].max = 4.0;
+		}
     	param_interval[2].min = 0.0;
     	param_interval[2].max = 1.0;
 		param_interval[3].min = 1.0;
