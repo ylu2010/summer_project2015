@@ -18,12 +18,15 @@ from numpy import linspace, meshgrid
 from matplotlib.mlab import griddata
 from matplotlib.ticker import MaxNLocator
 
+rname = 'pr'
 
 mname = 'm12'
 rundir = "/Users/luyu/project/disc_metal/data/"+mname+"/ihs_run2/"
-rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
-nfiles = 300
-ndim = 3
+#rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
+
+rundir = "/Users/luyu/project/summer_project2015/results/model_"+rname+"_lhc/"+mname+'/'
+nfiles = 600
+ndim = 4
 Hubble_h =0.7
 
 ##########################################
@@ -32,9 +35,10 @@ data = np.loadtxt(fname_range, comments = '#')
 range0 = data[1,]
 range1 = data[2,]
 range2 = data[3,]
+range3 = data[4,]
 
 
-prior_set_array = [range0, range1, range2]
+prior_set_array = [range0, range1, range2, range3]
 
 ##########################################
 fname_ilhs = rundir+'ILHS.txt'
@@ -42,6 +46,7 @@ data = np.loadtxt(fname_ilhs, comments = '#')
 p0 = data[:,0]
 p1 = data[:,1]
 p2 = data[:,2]
+p3 = data[:,3]
 
 ##########################################
 fname_list = rundir+'list.dat'
@@ -50,6 +55,7 @@ data = np.loadtxt(fname_list, comments = '#')
 p0 = data[:,1]
 p1 = data[:,2]
 p2 = data[:,3]
+p3 = data[:,4]
 
 p = np.transpose(data[:,1:])
 ##########################################
@@ -60,10 +66,14 @@ p = np.transpose(data[:,1:])
 #     Par.SNLoadingFractionToHot = params[3];
 #     Par.ZFractionYieldToEject = params[4];
 #    Par.ZFractionYieldToHot = params[5];
-pname0 = r'$\alpha_{LD}$'
-pname1 = r'$\beta_{LD}$'
+if rname == 'ej':
+    pname0 = r'$\alpha_{LD}$'
+    pname1 = r'$\beta_{LD}$'
+if rname == 'pr':
+    pname0 = r'$\beta_{PR}$'
+    pname1 = r'$\gamma_{PR}$'
 pname2 = r'$\mu_{\lambda}$'
-pname3 = r'$\alpha_{LD, HOT}$'
+pname3 = r'$\tau_{RI}$'
 pname4 = r'$\eta_{Z, EJ}$'
 pname5 = r'$\eta_{Z, HOT}$'
 pname6 = r'$\beta_{LD}$'
@@ -168,7 +178,7 @@ x_vec = mhalo_vec
 x_range = [1e10, 1e13]
 y_vec = mstar_vec
 y_min, y_max = mstar_min, mstar_max
-y_range = [1e8, 1e11]
+y_range = [1e8, 1e12]
 
 #isel = np.where(mstar_vec >= mstar_min) & (mstar_vec <= mstar_max))[0]   
 #isel = np.where((mcold_vec >= mcold_min) & (mcold_vec <= mcold_max))[0] 

@@ -19,9 +19,12 @@ from matplotlib.mlab import griddata
 from matplotlib.ticker import MaxNLocator
 
 
+rname = 'pr'
+
 mname = 'm12'
 rundir = "/Users/luyu/project/disc_metal/data/"+mname+"/ihs_run2/"
-rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
+#rundir = "/Users/luyu/project/summer_project2015/results/model_ej_lhc/"+mname+'/'
+rundir = "/Users/luyu/project/summer_project2015/results/model_"+rname+"_lhc/"+mname+'/'
 nfiles = 600
 ndim = 4
 Hubble_h = 0.7
@@ -61,8 +64,12 @@ p = np.transpose(data[:,1:])
 #     Par.SNLoadingFractionToHot = params[3];
 #     Par.ZFractionYieldToEject = params[4];
 #    Par.ZFractionYieldToHot = params[5];
-pname0 = r'$\alpha_{LD}$'
-pname1 = r'$\beta_{LD}$'
+if rname == 'ej':
+    pname0 = r'$\alpha_{LD}$'
+    pname1 = r'$\beta_{LD}$'
+if rname == 'pr':
+    pname0 = r'log $M_{PR}$'
+    pname1 = r'$\gamma_{PR}$'
 pname2 = r'$\mu_{\lambda}$'
 pname3 = r'$\tau_{RI}$'
 pname4 = r'$\eta_{Z, EJ}$'
@@ -246,7 +253,7 @@ y_range = [1e-2, 10]
 
 bool_mstar = (mstar_vec >= mstar_min) & (mstar_vec <= mstar_max)
 #bool_zstar = (interp1d(lgms_vec, lgzslo_vec)(np.log10(mstar_vec)) < np.log10(zstar_vec)) & (interp1d(lgms_vec, lgzsup_vec)(np.log10(mstar_vec)) > np.log10(zstar_vec))
-bool_zcold = (interp1d(lgmszcold_obs, lgzcoldlo_obs)(np.log10(mstar_vec)) < np.log10(zcold_vec)) & (interp1d(lgmszcold_obs, lgzcoldup_obs)(np.log10(mstar_vec)) > np.log10(zcold_vec))
+bool_zcold = (interp1d(lgmszcold_obs, lgzcoldlo_obs, fill_value='extrapolate')(np.log10(mstar_vec)) < np.log10(zcold_vec)) & (interp1d(lgmszcold_obs, lgzcoldup_obs, fill_value='extrapolate')(np.log10(mstar_vec)) > np.log10(zcold_vec))
 bool_mcold = (mcold_vec >= mcold_min) & (mcold_vec <= mcold_max)
 bool_mzcold = (mzcold_vec >= mzcold_min) & (mzcold_vec <= mzcold_max)
 bool_mhot = (mhot_vec >= mhot_min) & (mhot_vec <= mhot_max)
@@ -287,7 +294,7 @@ for i in range(ndim):
 #ndim = 6
 fpdf = rundir+'/figs/test_mzcold_'+mname+'.pdf'
 ################################################
-font = {'family' : 'normal',
+font = {'family' : 'serif',
         'weight' : 'normal',
         'size'   : 16}
 matplotlib.rc('font', **font)

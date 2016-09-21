@@ -47,6 +47,9 @@ struct parameter
 	double MassFractionEjectToHot;
 	double GalaxyHeatingEfficiency;
 	double ReincorporationTimeScale;
+	double PreventionMassScale;
+	double PreventionMassIndex;
+	double PreventionRedshift;
 };
 
 struct galaxy

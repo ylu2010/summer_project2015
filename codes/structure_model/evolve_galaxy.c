@@ -297,7 +297,8 @@ void halo_adjust(struct galaxy *gal, double z, double mh)
     gal->ConcenHalo = halo_concentration(z, gal);
     gal->TemperatureVirial = 35.9 * v * v;
     gal->EntropyVirial = gal->TemperatureVirial/pow(rho, 2./3) / factor;
-    gal->RadiusDisc = disk_radius(gal);
+    //gal->RadiusDisc = disk_radius(gal);
+	gal->RadiusDisc = disk_radius_simple(gal);
     halo_mass_profile(gal);
     hot_gas_profile_power_law_entropy(gal);
     //cold_gas_accretion_surface(gal, thubble, dt);

@@ -69,6 +69,7 @@ void hot_gas_profile_isenthermal(struct galaxy *gal);
 void hot_gas_profile_power_law_entropy ( struct galaxy *gal );
 
 double disk_radius(struct galaxy *gal);
+double disk_radius_simple(struct galaxy *gal);
 
 void init_file(int irun);
 void close_file(void);
