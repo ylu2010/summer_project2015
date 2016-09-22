@@ -26,19 +26,13 @@ double SolarMetallicity = 0.0134;
 double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
-int Mah_simu = 1;
+int Mah_simu = 0;
 int Do_preheating = 0;
 int Do_reinfall = 0;
 int N_halo = 11;
 float Mass_bin = 1.0;
 float LogHaloMassArray[11]={10.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Resize_radius_bins=1;
-int Mah_simu = 0;
-int Do_preheating = 0;
-int Do_reinfall = 0;
-int N_halo = 1;
-float Mass_bin = 12.0;
-float LogHaloMassArray[11]={12.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Write_pred_file=1;
 int Write_pred_saparately=0;
 int Write_hist_file=1;
@@ -192,13 +186,13 @@ void init_file(int irun)
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo MassBin\n");
+		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR StellarAge MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo MassBin\n");
 	}
 
     {
         sprintf(fname_snap, "snap.dat");
         fp_snap=fopen(fname_snap,"w");
-        fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR MetallicityCold MetallicityStar MassProfStar MassStar MassHalo MassBin\n");
+        fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR StellarAge MetallicityCold MetallicityStar MassProfStar MassStar MassHalo MassBin\n");
     }
  
     

@@ -324,13 +324,14 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-        fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+        fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
                 i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
                 (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
                 gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
                 gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i],
-                gal->CoolingRate[i],gal->CoolingTime[i],
+                gal->CoolingRate[i], gal->CoolingTime[i],
                 gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
+                gal->StellarAge[i] / (gal->SDensityStar[i] * M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i])),
                 gal->MassProfDM[i], gal->MassProfDMContracted[i],
                 gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, gal->SDensityMetalStar[i]/1e12,
                 gal->MetallicityCold[i], gal->MetallicityStar[i],
@@ -349,10 +350,11 @@ void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, doub
     int i;
     for(i=0; i<gal->nbin; i++)
     {
-        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
                 z,i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
                 (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12, (gal->SDensityColdAtomic[i]/1e12),
                 gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
+                gal->StellarAge[i] / (gal->SDensityStar[i] * M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i])),
                 gal->MetallicityCold[i], gal->MetallicityStar[i],
                 gal->MassProfStar[i], gal->MassStar, gal->MassHalo, gal->MassBin);
     }

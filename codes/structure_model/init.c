@@ -88,6 +88,7 @@ void init(struct galaxy *gal)
         gal->MetallicityCold[i] = 0.0;
         gal->MetallicityStar[i] = 0.0;
     	gal->CoolingTime[i] = 0.0;
+        gal->StellarAge[i] = 0.0;
     	for(j=0; j<ntbin; j++)
     	{
     		gal->SDensitySFH[i][j] = 0.0;
