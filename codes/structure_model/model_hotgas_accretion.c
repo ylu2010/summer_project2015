@@ -112,10 +112,23 @@ double do_preheating(struct galaxy *gal, double zcurr)
     return fraction;
 }
 
+double do_prevention(struct galaxy *gal, double z)
+{
+    double fraction;
+    double mvir, mterm, zterm;
+
+    mvir = gal->MassHalo;
+    mterm = pow(mvir / Par.PreventionMassScale, Par.PreventionMassIndex);
+    zterm = exp(-Par.PreventionRedshift * z );
+    fraction = dmin( 1.0, mterm / zterm);
+    return fraction;
+}
+
 double hot_accretion_fraction(struct galaxy *gal, double z)
 {
 	double f;
-	if(Do_preheating) f = do_preheating(gal, z);
+	//if(Do_preheating) f = do_preheating(gal, z);
+	if(Do_preheating) f = do_prevention(gal, z);
 	else f = 1;
 
 	return f;

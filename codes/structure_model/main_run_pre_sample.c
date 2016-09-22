@@ -19,8 +19,11 @@ int set_varying_parameters(double *params, int nparams)
 {
 	if(Do_preheating)
 	{
-		Par.PreheatEntropy = params[0];
-		Par.PreheatEntropySlope = params[1];
+		Par.PreventionMassScale = pow(10., params[0]);
+		Par.PreventionRedshift = params[1];
+		Par.SNLoadingFactor = 5.0;
+        Par.SNLoadingFactorIndex = 2.0;
+		Par.PreheatEntropy = 0.1;
 	}
 	else
 	{
@@ -31,6 +34,7 @@ int set_varying_parameters(double *params, int nparams)
     //Par.Yield = params[3];
     //Par.ZFractionYieldToHot = params[4];
 	Par.DiskRadiusFactor = params[2];
+	Par.ReincorporationTimeScale = params[3];
 
 	return 0;
 }
@@ -75,9 +79,9 @@ int general_parameter_sample(int nparams, int point_num, struct interval *param_
 
 int main( int argc, const char* argv[] )
 {
-	int nparams = 3;
+	int nparams = 4;
 	int npreds = 5*2;
-	int point_num = 300;
+	int point_num = 600;
 	int seed = 17;
 	int ihalo = 0;
 	int mode, write_pred_saparately;
@@ -104,12 +108,24 @@ int main( int argc, const char* argv[] )
     	seed = atoi(argv[2]);
     	printf("In the sampling mode... The code is generating parameter samples with a random seed=%d...\n\n", seed);
 
-    	param_interval[0].min = 0.0;
-    	param_interval[0].max = 10.0;
-    	param_interval[1].min = 0.0;
-    	param_interval[1].max = 4.0;
+		if(Do_preheating)
+		{
+			param_interval[0].min = 10.0;
+        	param_interval[0].max = 12.0;
+        	param_interval[1].min = -2.0;
+        	param_interval[1].max = 2.0;
+		}
+		else
+		{
+    		param_interval[0].min = 0.0;
+    		param_interval[0].max = 10.0;
+    		param_interval[1].min = 0.0;
+    		param_interval[1].max = 4.0;
+		}
     	param_interval[2].min = 0.0;
     	param_interval[2].max = 1.0;
+		param_interval[3].min = 1.0;
+		param_interval[3].max = 30.0;
     	if(!(  fp=fopen("param_range.txt","w")))
     	{
     		printf("I can not open the file param_range.txt.");

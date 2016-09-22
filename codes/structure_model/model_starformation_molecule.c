@@ -304,17 +304,19 @@ double outflow_massloading_factor(struct galaxy *gal)
 	p0 = 0;// * pow(200/gal->VelocityVirial, -1);//Par.SNLoadingFactorIndex);
 	//if(Do_preheating) f = (p0+1.0*pow(sigma0/600, 6)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
 	//if(Do_preheating) f = (p0+0.0*pow(gal->MassStar/2.0e10, 2)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0))); //disk paper used this
-	if(Do_preheating) //f = (p0+0.0*pow(gal->MassStar/2.0e10, 2)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
+	//if(Do_preheating) //f = (p0+0.0*pow(gal->MassStar/2.0e10, 2)) + 1.*(Par.SNLoadingFactor-p0) * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
 				//f = Par.SNLoadingFactor + 3 * ( 0.5 *  (1.+gsl_sf_erf((z - 1.5)/1.0))); // a good model for samples
 				//f = Par.SNLoadingFactor + 3 * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
-				f = Par.SNLoadingFactor + 0 * ( 0.5 *  (1.+gsl_sf_erf((z - 1.2)/1.)));
+//				f = Par.SNLoadingFactor + 0 * ( 0.5 *  (1.+gsl_sf_erf((z - 1.2)/1.)));
 	/*
 	r = dmin(gal->RadiusHalfStar, gal->RadiusHalo);
 	sigma0 = gal->RateStarFormation / (2.*M_PI*r*r/1.678/1.678)/1e12;
 	if(Do_preheating) f= 1.0*pow(sigma0/300, 6)+Par.SNLoadingFactor * ( 0.5 *  (1.+gsl_sf_erf((z - 2.5)/1.0)));
 	*/
 	//if (Do_preheating) f = 0.0;
-	else f = Par.SNLoadingFactor * pow(200/gal->VelocityVirial, Par.SNLoadingFactorIndex);
+	//else f = Par.SNLoadingFactor * pow(200/gal->VelocityVirial, Par.SNLoadingFactorIndex);
+
+	f = Par.SNLoadingFactor * pow(200/gal->VelocityVirial, Par.SNLoadingFactorIndex);
 	//printf("outflow: %d %g %g %g %g \n", Do_preheating, z, gal->MassStar, r, f);
 
 	return f;
@@ -654,13 +656,14 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 
 }
 
-double reioncorporation_model_henriques2013(double mvir)
+double reincorporation_model_henriques2013(double mvir)
 {
 	double t0 = 18.0; // in Gyr
 	double m0 = 1e10; // in Msun
 	double t;
 
-	t = t0 * m0 / mvir;
+	//t = t0 * m0 / mvir;
+	t = Par.ReincorporationTimeScale * m0 / mvir;
 	return t;
 }
 
@@ -671,7 +674,7 @@ void ejected_gas_reincorporation(struct galaxy *gal, double t, double dt)
 	if (gal->MassEject > 1e-33) zeject = gal->MetalEject / gal->MassEject;
 	else zeject = 0.0;
 
-	trein = reioncorporation_model_henriques2013(gal->MassHalo);
+	trein = reincorporation_model_henriques2013(gal->MassHalo);
 
 	dm = dmin(gal->MassEject * dt / trein, gal->MassEject);
 

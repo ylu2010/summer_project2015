@@ -20,6 +20,7 @@ extern int Metal_gas_evolu;
 extern int Mah_simu;
 extern int Do_preheating;
 extern int Do_reinfall;
+extern int Star_formation_model;
 extern float Mass_bin;
 extern int Resize_radius_bins;
 extern double Redshift;
@@ -46,6 +47,10 @@ struct parameter
 	double ZFractionYieldToHot;
 	double MassFractionEjectToHot;
 	double GalaxyHeatingEfficiency;
+	double ReincorporationTimeScale;
+	double PreventionMassScale;
+	double PreventionMassIndex;
+	double PreventionRedshift;
 };
 
 struct galaxy
