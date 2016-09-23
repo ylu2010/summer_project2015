@@ -22,6 +22,7 @@ extern int Do_preheating;
 extern int Do_reinfall;
 extern int Star_formation_model;
 extern float Mass_bin;
+extern int Resize_radius_bins;
 extern double Redshift;
 extern double Redshift_end;
 extern double Bin_size_time;
@@ -118,6 +119,7 @@ struct galaxy
     double SDensitySFR[N_RADIUS_BIN];
 	double SDensityOFR[N_RADIUS_BIN];
     double SDensityCAR[N_RADIUS_BIN];//Cold gas accretion rate
+    double StellarAge[N_RADIUS_BIN];
     double TimeArray[N_TIME_BIN];
     double StarFormationHistory[N_TIME_BIN]; // stellar mass formed in a time interval
     double SDensitySFH[N_RADIUS_BIN][N_TIME_BIN];
