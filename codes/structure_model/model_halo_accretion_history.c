@@ -202,6 +202,23 @@ int read_simu_mah(void)
 
 	//sprintf(filename,"./mah_180_m12.0.txt");
 
+    // NATHAN'S MAH DIRECTORIES
+     if (Redshift_end == 0.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_180_m10_12_selected.txt");
+     if (Redshift_end == 0.5) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_094_m10_12_selected.txt");
+     if (Redshift_end == 1.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_066_m10_12_selected.txt");
+     if (Redshift_end == 2.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_039_m10_12_selected.txt");
+     if (Redshift_end == 3.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_027_m10_12_selected.txt");
+     if (Redshift_end == 4.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_019_m10_12_selected.txt");
+     if (Redshift_end == 5.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_013_m10_12_selected.txt");
+     if (Redshift_end == 6.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_009_m10_12_selected.txt");
+     
+     if (Redshift_end == 0.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_099_m10_12_selected.txt");  // Chinchilla simulation
+     if (Redshift_end == 0.5) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_084_m10_12_selected.txt");  // Chinchilla simulation
+     if (Redshift_end == 1.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_073_m10_12_selected.txt");  // Chinchilla simulation
+     if (Redshift_end == 2.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_058_m10_12_selected.txt");  // Chinchilla simulation
+    
+
+    /* YU'S MAH DIRECTORIES
 	if (Redshift_end == 0.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m10_12_selected.txt");
 	if (Redshift_end == 0.5) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_094_m10_12_selected.txt");
 	if (Redshift_end == 1.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_066_m10_12_selected.txt");
@@ -215,6 +232,7 @@ int read_simu_mah(void)
 	if (Redshift_end == 0.5) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_084_m10_12_selected.txt");  // Chinchilla simulation
 	if (Redshift_end == 1.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_073_m10_12_selected.txt");  // Chinchilla simulation
 	if (Redshift_end == 2.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_058_m10_12_selected.txt");  // Chinchilla simulation
+    */
 
 /*
   // mass function weighting

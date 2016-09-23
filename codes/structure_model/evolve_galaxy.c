@@ -203,18 +203,20 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 			disc_mass_composition(gal);
 			//printf("mcold=%g matom=%g %g\n", gal->MassCold, gal->MassColdAtomic, f_hot_accretion);
 			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
-				gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
+				gal->MassHalo, gal->MassBin, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
 				gal->MassColdAtomic, gal->MassColdMolecular, gal->MassColdIonized,
 				gal->RadiusHalo, gal->RadiusDisc, gal->RadiusHalfCold, gal->RadiusHalfStar, gal->RadiusCooling, gal->ConcenHalo,
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
-				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject, gal->MassBin);
+				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject);
 		}
+        
+        if(Write_SFH_file)
        
         if(Write_snap_file && z<=3.1 && fmod(z,0.5)<0.001)
         {
             struct galaxytemp *galtemp = malloc(sizeof(struct galaxy));
             memcpy(galtemp, gal, sizeof *gal);
-			print_snapshot(galtemp, z, thubble, dt, mh);
+            print_snapshot(galtemp, z, thubble, dt, mh);
             free(galtemp);
         }
        
@@ -263,6 +265,10 @@ void evolve_galaxy(struct galaxy *gal, int mode)
     cold_gas_accretion_surface(gal, thubble, dt);
     disc_mass_composition(gal);
     sig_metal_calc(gal);
+    
+    //Terminal Stellar Age Calculation
+    stellar_age_calc(gal, thubble);
+    
     /*
     //Calculating SDensity for Metals
     int i;
@@ -325,17 +331,33 @@ void sig_metal_calc(struct galaxy *gal)
           }
 }
 
+void stellar_age_calc(struct galaxy *gal, double thubble)
+{
+    int i;
+    double area;
+    for(i=0; i<gal->nbin; i++)
+		  {
+              area = M_PI * (gal->RadiusOuter[i]*gal->RadiusOuter[i] - gal->RadiusInner[i] * gal->RadiusInner[i]);
+              gal->StellarAge[i] = thubble - gal->StellarAge[i] / (gal->SDensityStar[i] * area);
+          }
+}
+
 void print_galaxy(struct galaxy *gal)
 {
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-		fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-				i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12),
-			        (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3, gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i],
-			        gal->MassProfHot[i], gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i], gal->CoolingRate[i],gal->CoolingTime[i],gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
-			        gal->MassProfDM[i], gal->MassProfDMContracted[i], gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, 
-			        gal->SDensityMetalStar[i]/1e12, gal->MetallicityCold[i], gal->MetallicityStar[i], gal->MassBin, (gal->RadiusInner[i]/gal->RadiusHalfStar));
+        fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+                i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
+                (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
+                gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
+                gal->DensityProfHot[i]/1e9, gal->TemperatureProfHot[i],
+                gal->CoolingRate[i], gal->CoolingTime[i],
+                gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i], gal->StellarAge[i],
+                gal->MassProfDM[i], gal->MassProfDMContracted[i],
+                gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, gal->SDensityMetalStar[i]/1e12,
+                gal->MetallicityCold[i], gal->MetallicityStar[i],
+                gal->MassStar, gal->MassHalo, gal->MassBin);
 	}
 }
 
@@ -346,18 +368,17 @@ void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, doub
     cold_gas_accretion_surface(gal, thubble, dt);
     disc_mass_composition(gal);
     sig_metal_calc(gal);
+    stellar_age_calc(gal, thubble);
     
     int i;
     for(i=0; i<gal->nbin; i++)
     {
-        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
-            z,i, (gal->RadiusInner[i])*1e3, (gal->SDensityCold[i])/1e12,
-            (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12,
-            (gal->SDensityColdAtomic[i]/1e12), (gal->RadiusOuter[i])*1e3,
-            gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i],
-            gal->MetallicityCold[i], gal->MetallicityStar[i],
-            gal->MassProfStar[i], gal->MassStar, gal->MassBin,
-            (gal->RadiusInner[i]/gal->RadiusHalfStar));
+        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+                z,i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
+                (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12, (gal->SDensityColdAtomic[i]/1e12),
+                gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i], gal->StellarAge[i],
+                gal->MetallicityCold[i], gal->MetallicityStar[i],
+                gal->MassProfStar[i], gal->MassStar, gal->MassHalo, gal->MassBin);
     }
 }
 

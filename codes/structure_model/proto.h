@@ -23,6 +23,7 @@ int finalize_run(void);
 
 
 void init(struct galaxy *gal);
+//void resize_radius_bins(struct galaxy *gal);
 
 void cold_gas_accretion(struct galaxy *gal, double t, double dt);
 void cold_gas_accretion_surface(struct galaxy *gal, double t, double dt);
@@ -75,9 +76,10 @@ void init_file(int irun);
 void close_file(void);
 
 void sig_metal_calc(struct galaxy *gal);
+void stellar_age_calc(struct galaxy *gal, double thubble);
 void halo_adjust(struct galaxy *gal, double z, double mh);
 void print_galaxy(struct galaxy *gal);
-void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, double mh);
+void print_snapshot(struct galaxy *gal, double z, double thubble, double dt, double mh);
 
 double dmax(double x, double y);
 double dmin(double x, double y);

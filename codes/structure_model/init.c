@@ -55,7 +55,23 @@ void init(struct galaxy *gal)
     gal->SDensityCold = malloc(gal->nbin * sizeof(double));
     gal->SDensityStar = malloc(gal->nbin * sizeof(double));
 	*/
-    gal->RadiusMostOuter = 0.270; // 200kpc
+    
+    if(Resize_radius_bins == 1)
+    {
+        double z0, mh, rho, r_vir;
+        
+        z0 = Redshift_end;
+        mh = mah(z0);
+        rho = Delta_vir(z0) * rho_crit(z0) * xhubble * xhubble;
+        r_vir = pow(3.*mh/(4.*M_PI*rho), 1./3);
+        
+        gal->RadiusMostOuter = 1.2 * r_vir;
+    }
+    else
+    {
+        gal->RadiusMostOuter = 0.270; // 270kpc
+    }
+    
     gal->RadiusMostInner = pow(10., lgrmin) * gal->RadiusMostOuter;
     for (i=0; i<nbin; i++)
     {
@@ -65,13 +81,14 @@ void init(struct galaxy *gal)
     	gal->SDensityStar[i] = 0.0;
     	gal->SDensityColdAtomic[i] = 0.0;
     	gal->SDensityColdMolecular[i] = 0.0;
-	gal->SDensityMetalCold[i] = 0.0;
-	gal->SDensityMetalStar[i] = 0.0;
-	gal->MassMetalCold[i] = 0.0;
-	gal->MassMetalStar[i] = 0.0;
-	gal->MetallicityCold[i] = 0.0;
-	gal->MetallicityStar[i] = 0.0;
+        gal->SDensityMetalCold[i] = 0.0;
+        gal->SDensityMetalStar[i] = 0.0;
+        gal->MassMetalCold[i] = 0.0;
+        gal->MassMetalStar[i] = 0.0;
+        gal->MetallicityCold[i] = 0.0;
+        gal->MetallicityStar[i] = 0.0;
     	gal->CoolingTime[i] = 0.0;
+        gal->StellarAge[i] = 0.0;
     	for(j=0; j<ntbin; j++)
     	{
     		gal->SDensitySFH[i][j] = 0.0;

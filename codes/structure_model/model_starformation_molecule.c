@@ -380,74 +380,73 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     		sfe = sd_sfr = 0.0;
     	}
 
-    		//printf("debug_star_formation: %d %g %g %g %g %g %g\n", i, sd_sfr, sfe1, sfe, dden, sd_cold_tmp);
-    		gal->SDensitySFH[i][j] += sd_sfr * dt;
-    		for(k=0, t0=0, fml=0, mp=0; k<j; k++)
-    		{
+        //printf("debug_star_formation: %d %g %g %g %g %g %g\n", i, sd_sfr, sfe1, sfe, dden, sd_cold_tmp);
+        gal->SDensitySFH[i][j] += sd_sfr * dt;
+        for(k=0, t0=0, fml=0, mp=0; k<j; k++)
+        {
 
-    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] *
-    					(stellar_mass_loss(t - gal->TimeArray[k]+0.5*dt) -
-    							stellar_mass_loss(t - gal->TimeArray[k]-0.5*dt));
-				/*
-    			if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] * (stellar_mass_loss(t-gal->TimeArray[k]+0.5*Bin_size_time)-
-    							stellar_mass_loss(t-gal->TimeArray[k]-0.5*Bin_size_time));
-								*/
-    			//t0 = gal->TimeArray[k];
-    			mp += gal->SDensitySFH[i][k] * (1.-stellar_mass_loss(t-gal->TimeArray[k]));
-    			//if(gal->z < 0.0001) printf("SF debug: %d %d %d %g %g %g %g\n", i, k, j, t, gal->TimeArray[k],stellar_mass_loss(t-gal->TimeArray[k]), mp);
-    		}
-    		//fml = sd_sfr * dt * 0.43;
+            if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] *
+                    (stellar_mass_loss(t - gal->TimeArray[k]+0.5*dt) -
+                            stellar_mass_loss(t - gal->TimeArray[k]-0.5*dt));
+            /*
+            if(t>gal->TimeArray[0]) fml += gal->SDensitySFH[i][k] * (stellar_mass_loss(t-gal->TimeArray[k]+0.5*Bin_size_time)-
+                            stellar_mass_loss(t-gal->TimeArray[k]-0.5*Bin_size_time));
+                            */
+            //t0 = gal->TimeArray[k];
+            mp += gal->SDensitySFH[i][k] * (1.-stellar_mass_loss(t-gal->TimeArray[k]));
+            //if(gal->z < 0.0001) printf("SF debug: %d %d %d %g %g %g %g\n", i, k, j, t, gal->TimeArray[k],stellar_mass_loss(t-gal->TimeArray[k]), mp);
+        }
+        //fml = sd_sfr * dt * 0.43;
 
-    		//printf("%g %g\n", fml, 0.3*sd_sfr*dt);
-    		//gal->SDensityStar[i] += (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
-    		//gal->SDensityStar[i] -= fml;
-    		gal->SDensityStar[i] = mp;
+        //printf("%g %g\n", fml, 0.3*sd_sfr*dt);
+        //gal->SDensityStar[i] += (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
+        //gal->SDensityStar[i] -= fml;
+        gal->SDensityStar[i] = mp;
 
-    		sd_cold_tmp -= (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
-    		//sd_cold_tmp += fml;
+        sd_cold_tmp -= (1.-Par.StellarMassLossFraction) * sd_sfr *dt;
+        //sd_cold_tmp += fml;
 
-    		//loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
-    		sd_ofr = dmin(loadingfactor * sd_sfr * dt, sd_cold_tmp);
-    		sd_cold_tmp -= sd_ofr;
-//printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
-//exit(0);
-    		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
-    		gal->SDensitySFR[i] = sd_sfr / dt;
-			gal->SDensityOFR[i] = sd_ofr / dt;
-    		sfr += sd_sfr * area; //if global metallicity calculated in loop, is this necessary?
-    		ofr += sd_ofr * area /dt; //if global metallicity calculated in loop, is this necessary?
+        //loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
+        sd_ofr = dmin(loadingfactor * sd_sfr * dt, sd_cold_tmp);
+        sd_cold_tmp -= sd_ofr;
+        //printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
+        //exit(0);
+        gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
+        gal->SDensitySFR[i] = sd_sfr / dt;
+        gal->SDensityOFR[i] = sd_ofr / dt;
+        sfr += sd_sfr * area /dt; //if global metallicity calculated in loop, is this necessary?
+        ofr += sd_ofr * area /dt; //if global metallicity calculated in loop, is this necessary?
 
-/*
-    		mstar += gal->SDensityStar[i] * area;
-    		mcold += gal->SDensityCold[i] * area;
-*/
-    	//}
-    	mstar += gal->SDensityStar[i] * area;
-    	mcold += gal->SDensityCold[i] * area;
+        mstar += gal->SDensityStar[i] * area;
+        mcold += gal->SDensityCold[i] * area;
+        
+        // Stellar Age Calculation
+        gal->StellarAge[i] += t * sd_sfr * area; // must be divided by total stellar mass at end
+        
 
-    // metallicity by radius //sfr and ofr are global so using sd_sfr * area and sd_ofr * area / dt(???) instead
-    gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
-    gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
-      - sd_ofr * area / dt * dt  * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction); 
-    // gal->MassMetalHot[i] += sdr_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot; //Assumes hot mass deposited at location of star formation
+        // metallicity by radius
+        // sfr and ofr are global so using sd_sfr * area and sd_ofr * area / dt(???) instead
+        gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
+        gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
+            - sd_ofr * area / dt * dt  * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
+        // gal->MassMetalHot[i] += sdr_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot; //Assumes hot mass deposited at location of star formation
 
 
-    //if ((sd_cold_tmp * area) > 0.0) zcoldglobal = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
-    //else zcoldglobal = 0.0;
+        //if ((sd_cold_tmp * area) > 0.0) zcoldglobal = (gal->MassMetalCold[i])/(sd_cold_tmp * area);
+        //else zcoldglobal = 0.0;
 
     
-    //metallicity global
-    gal->MetalStar += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
-    gal->MetalCold += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
-      - sd_ofr * area / dt * dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction); 
-    gal->MetalHot += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot;
-    gal->MetalEject += sd_ofr * area / dt * dt * zcold + sd_sfr *area * dt * Par.Yield * Par.ZFractionYieldToEject;
-    //coldadd = sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot) 
-    //  - sd_ofr * area * dt / dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
-    //printf("debug_star_formation3: %g %g %g %g\n", t, gal->MetalCold, gal->MassMetalCold[i], coldadd);
-    
-
+        //metallicity global
+        gal->MetalStar += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
+        gal->MetalCold += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
+            - sd_ofr * area / dt * dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
+        gal->MetalHot += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot;
+        gal->MetalEject += sd_ofr * area / dt * dt * zcold + sd_sfr *area * dt * Par.Yield * Par.ZFractionYieldToEject;
+        //coldadd = sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
+        //  - sd_ofr * area * dt / dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
+        //printf("debug_star_formation3: %g %g %g %g\n", t, gal->MetalCold, gal->MassMetalCold[i], coldadd);
     }
+    
     //printf("debug_star_formation: %g %g %g %g %g %g\n", t, hubble_time(0) * xH0_recip, dt, sfr, mstar, mcold);
     gal->MassCold = mcold;
     gal->MassStar = mstar;
@@ -458,8 +457,6 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
     gal->RateOutflow = ofr;
 
     
-
-
     //printf("SF:%g %g %g %g %g %g\n", gal->MassCold, gal->MassStar, gal->MetalCold, gal->MetalStar, sfr, ofr);
 }
 
@@ -613,7 +610,7 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
 //printf("debug: %d %g %g %g %g %g %g %g\n", i, gal->z, loadingfactor_reheat, loadingfactor_eject, sd_sfr, dt, (loadingfactor_reheat+loadingfactor_eject) * sd_sfr * dt, sd_cold_tmp);
 //exit(0);
     		gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
-    		gal->SDensitySFR[i] = sd_sfr / dt;
+            gal->SDensitySFR[i] = sd_sfr;// / dt;
 			gal->SDensityOFR[i] = (sd_ofr_reheat + sd_ofr_eject) ;
     		sfr += sd_sfr * area; //necessary if global metallicity calculation is in loop?
     		ofr_reheat += sd_ofr_reheat * area /dt;  //necessary if global metallicity calculation is in loop?
@@ -626,6 +623,9 @@ void star_formation_surface_molecule_with_guo2011_feedback(struct galaxy *gal, d
     	//}
     	mstar += gal->SDensityStar[i] * area;
     	mcold += gal->SDensityCold[i] * area;
+        
+        // Stellar Age Calculation
+        gal->StellarAge[i] += t * sd_sfr * area; // must be divided by          total stellar mass at end
 
     //metallicity by radius //sfr, ofr_reheat, and ofr_eject are global so using sd_sfr * area, sd_ofr_reheat * area / dt(???), and  sd_ofr_eject * area / dt(???)
     gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
