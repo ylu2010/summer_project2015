@@ -209,8 +209,6 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
 				gal->VelocityVirial, gal->EntropyVirial, gal->TimeCooling, gal->MetalHot, gal->MetalCold, gal->MetalStar, gal->MetalEject);
 		}
-        
-        if(Write_SFH_file)
        
         if(Write_snap_file && z<=3.1 && fmod(z,0.5)<0.001)
         {
