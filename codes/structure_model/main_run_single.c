@@ -32,9 +32,17 @@ int main( int argc, const char* argv[] )
 
 	int ihalo;
 	int mode;
+	char parameter_file[200];
 	double *params, *preds;
 
-    setup_run();
+    if(argc != 2)
+    {
+        printf("\n  usage: gstructure <parameterfile>\n\n");
+        exit(1);
+    }
+
+	strcpy(parameter_file, argv[1]);
+    setup_run(parameter_file);
 
     run_galaxy(params, nparams, preds, npreds, 1, 0);
 

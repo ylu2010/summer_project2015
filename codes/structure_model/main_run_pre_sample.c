@@ -90,22 +90,22 @@ int main( int argc, const char* argv[] )
 	double *p;
 	int irun, iparam;
 	struct interval *param_interval;
-	char input_param_list[200];
+	char parameter_file[200], input_param_list[200];
 	FILE *fp;
 
-    if(argc < 3)
+    if(argc < 4)
     {
-        printf("\n  usage: sample_gstructure 0 <random_seed (cannot be 0!)>\n\n");
-        printf("\n  usage: sample_gstructure 1 <ParameterList>\n\n");
+        printf("\n  usage: sample_gstructure <parameter_file> 0 <random_seed (cannot be 0!)>\n\n");
+        printf("\n  usage: sample_gstructure <parameter_file> 1 <ParameterList>\n\n");
         exit(1);
     }
 
-    mode = atoi(argv[1]);
+    mode = atoi(argv[2]);
 
     param_interval = (struct interval *) malloc(sizeof(struct interval)*nparams);
     if (mode == 0)
     {
-    	seed = atoi(argv[2]);
+    	seed = atoi(argv[3]);
     	printf("In the sampling mode... The code is generating parameter samples with a random seed=%d...\n\n", seed);
 
 		if(Do_preheating)
@@ -143,13 +143,7 @@ int main( int argc, const char* argv[] )
     }
     else
     {
-    	if(argc < 3)
-    	{
-    		printf("In a mode where a pre-generated parameter list is expected.\n");
-    		printf("\n  usage: sample_gstructure 1 <ParameterList>\n\n");
-    	    exit(1);
-    	}
-    	strcpy(input_param_list, argv[2]);
+    	strcpy(input_param_list, argv[3]);
     	if(!(  fp=fopen(input_param_list,"r")))
     	{
     	    printf("I cannot open the file %s.", input_param_list);
@@ -176,7 +170,8 @@ int main( int argc, const char* argv[] )
 	params = (double *) malloc(sizeof(double) * nparams);
 	preds = (double *) malloc(sizeof(double) * npreds);
 
-    setup_run();
+	strcpy(parameter_file, argv[1]);
+	setup_run(parameter_file); 
 
 	fp_list=fopen("list.dat","w");
 

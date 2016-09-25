@@ -27,20 +27,22 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 0;
+int Do_preheating = 1;
 int Star_formation_model = 1;
-int Do_reinfall = 0;
-int N_halo = 11;
-float Mass_bin = 12.0;
-float LogHaloMassArray[11]={10.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
+int Do_reinfall = 1;
+int N_halo = 1;
+double Mass_bin = 12.0;
+float LogHaloMassArray[11]={12.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Resize_radius_bins=1;
 int Write_pred_file=1;
 int Write_pred_saparately=0;
-int Write_hist_file=1;
-int Write_prof_file=1;
-int Write_snap_file=1;
+int Write_hist_file=0;
+int Write_prof_file=0;
+int Write_snap_file=0;
 double Redshift;
 double Redshift_end=0.0;
+
+char Mah_file_name[400];
 
 struct parameter Par;
 
@@ -50,7 +52,7 @@ FILE *fp_disc;
 FILE *fp_list;
 FILE *fp_snap;
 
-int setup_run(void)
+int setup_run(char *fname)
 {
 
 	UnitMass_in_g = MSUN_IN_G;
@@ -59,53 +61,9 @@ int setup_run(void)
 	UnitTime_in_Second = 1e9*365*24*3600.;
 	UnitVelocity_in_cm_per_s = 1e5;
 
-	Par.Reionization_z0 = 12;
-	Par.Reionization_zr = 11;
+	read_parameter_file(fname);
 
-	Par.BaryonAccretionFraction = 1.0;
-	Par.StellarMassLossFraction = 0.43;//0.35/1.35;
-	Par.Yield = 0.03;
-
-	Par.MassFractionEjectToHot = 0.0;
-	Par.ReincorporationTimeScale = 1e33;
-
-	Par.PreventionMassIndex = 3.0;
-
-	if ( Do_preheating)
-	{
-		Par.PreheatEntropySlope = 0.2;
-		Par.PreheatEntropy = 10;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
-		Par.EntropyProfileIndex = 0.0;
-		Par.DiskRadiusFactor = 1.1;
-		Par.ZFractionYieldToEject = 0.0;// for PR model
-		Par.ZFractionYieldToHot = 0.1;  // for PR model
-		Par.GalaxyHeatingEfficiency = 0.0;//1.1;
-		Par.SNLoadingFactor= 1;
-		Par.SNLoadingFactorIndex = 0.;
-	}
-	else
-	{
-		Par.PreheatEntropySlope = 0.;
-		Par.PreheatEntropy = 0.0;
-		Par.EntropyProfileIndex = 1.1;//4./3;
-		Par.DiskRadiusFactor = 1.2;    // for EJ model
-		Par.ZFractionYieldToEject = 0.;// for EJ model
-		Par.ZFractionYieldToHot = 0.1;  // for EJ model
-		Par.GalaxyHeatingEfficiency = 0.;
-		Par.SNLoadingFactor= 1;
-		Par.SNLoadingFactorIndex = 2;
-		if (Do_reinfall)
-		{
-			//Par.DiskRadiusFactor = 0.6;  // for RI model
-			Par.ReincorporationTimeScale = 18.0; 
-			Par.ZFractionYieldToEject = 0.;
-			Par.ZFractionYieldToHot = 0.;
-		}
-	}
-
-	Par.StarFormationCriticalSurfaceDensity = 10; //Msun/pc^2 no use for the Krumholz model
-	Par.StarFormationEfficiency = 0.0; // no use for Krumholz model
-	Par.EntropyRatio = 1;
+	init_parameters();
 
 	init_cosmo();
 
@@ -148,7 +106,7 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 	for (ihalo=0; ihalo<N_halo; ihalo++)
 	{
 		if (Mah_simu) select_simu_mah(ihalo);
-		else Mass_bin = LogHaloMassArray[ihalo];
+		//else Mass_bin = LogHaloMassArray[ihalo];
 
 		init(&gal);
 

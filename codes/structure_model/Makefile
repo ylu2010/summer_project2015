@@ -14,12 +14,12 @@ TESTMCMC_EXEC	= test_mcmc
 
 GAL_SOURCE	= evolve_galaxy.c init.c model_halo_accretion_history.c model_starformation_molecule.c cosmo.c \
 			model_hotgas_accretion.c model_coldgas_accretion.c model_reionization.c model_disc_size.c model_adiabatic_contraction.c \
-			cooling.c misc.c \
+			cooling.c misc.c setup_parameters.c \
 			run_galaxy.c 
 			
 GAL_OBJS	= evolve_galaxy.o init.o model_halo_accretion_history.o model_starformation_molecule.o cosmo.o \
 			model_hotgas_accretion.o model_coldgas_accretion.o model_reionization.o model_disc_size.o model_adiabatic_contraction.o \
-			cooling.o misc.o \
+			cooling.o misc.o setup_parameters.o \
 			run_galaxy.o 
 			
 GAL_INCL	= cosmo.h variables.h  proto.h
