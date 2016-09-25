@@ -28,8 +28,9 @@ extern int Resize_radius_bins;
 extern double Redshift;
 extern double Bin_size_time;
 
-extern char Mah_file_name[];
-extern char OutputDir[];
+extern char Cooling_function_dir[400];
+extern char Mah_file_name[400];
+extern char OutputDir[400];
 extern int Write_pred_saparately;
 
 struct parameter

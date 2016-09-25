@@ -248,7 +248,7 @@ double delta_c(double z)
 // copied from Frank's program
 {
 	double ddd,dc0,omz;
-      	double growth_rate, delta_c;
+   	double delta_c;
 
       	omz = Omega_m(z);
       	ddd = 1.0 / lin_growth(z);
@@ -436,7 +436,7 @@ double transferWDM(double xk)
 // the WDM transfer function T_WDM(k) = sqrt(P_WDM(k)/P_CDM(k))
 // See Sommer-Larsen & Dolgov, 2001, ApJ, 551, 608
 {
-	double rf, fac, tr, tf;
+	double rf, fac, tr;
 
 	rf = 0.065 * pow(Omega_M0 -Omega_Baryon0, -1.0/3.0) * pow(MF_WDM/1.0e11, 1.0/3.0);
 

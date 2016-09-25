@@ -56,14 +56,9 @@ double mah_mcbride(double z)
 double mah(double z)
 {
 	double m;
-	double a = 1./(1+z);
 	if (Mah_simu)
 	{
 		m = mah_simu(z);
-		/*
-		printf("m=%g\n",m);
-		if (m <=0.0) m = mah_simu(0.0) * mah_wechsler(a)/mah_wechsler(1);
-		*/
 	}
 	else
 	{
@@ -197,78 +192,12 @@ double *mah_z, *mah_a, *mah_lgm, **mah_array;
 int read_simu_mah(void)
 {
 	int i, j, nhalo, nz;
-	char filename[200], sbuf[200];
+	char sbuf[200];
 	FILE *fd;
 
-	//sprintf(filename,"./mah_180_m12.0.txt");
-
-    // NATHAN'S MAH DIRECTORIES
-     if (Redshift_end == 0.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_180_m10_12_selected.txt");
-     if (Redshift_end == 0.5) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_094_m10_12_selected.txt");
-     if (Redshift_end == 1.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_066_m10_12_selected.txt");
-     if (Redshift_end == 2.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_039_m10_12_selected.txt");
-     if (Redshift_end == 3.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_027_m10_12_selected.txt");
-     if (Redshift_end == 4.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_019_m10_12_selected.txt");
-     if (Redshift_end == 5.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_013_m10_12_selected.txt");
-     if (Redshift_end == 6.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_009_m10_12_selected.txt");
-     
-     if (Redshift_end == 0.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_099_m10_12_selected.txt");  // Chinchilla simulation
-     if (Redshift_end == 0.5) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_084_m10_12_selected.txt");  // Chinchilla simulation
-     if (Redshift_end == 1.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_073_m10_12_selected.txt");  // Chinchilla simulation
-     if (Redshift_end == 2.0) sprintf(filename, "/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_chin/mah_058_m10_12_selected.txt");  // Chinchilla simulation
-    
-
-    /* YU'S MAH DIRECTORIES
-	if (Redshift_end == 0.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m10_12_selected.txt");
-	if (Redshift_end == 0.5) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_094_m10_12_selected.txt");
-	if (Redshift_end == 1.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_066_m10_12_selected.txt");
-	if (Redshift_end == 2.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_039_m10_12_selected.txt");
-	if (Redshift_end == 3.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_027_m10_12_selected.txt");
-	if (Redshift_end == 4.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_019_m10_12_selected.txt");
-	if (Redshift_end == 5.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_013_m10_12_selected.txt");
-	if (Redshift_end == 6.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_009_m10_12_selected.txt");
-
-	if (Redshift_end == 0.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_099_m10_12_selected.txt");  // Chinchilla simulation
-	if (Redshift_end == 0.5) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_084_m10_12_selected.txt");  // Chinchilla simulation
-	if (Redshift_end == 1.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_073_m10_12_selected.txt");  // Chinchilla simulation
-	if (Redshift_end == 2.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_chin/mah_058_m10_12_selected.txt");  // Chinchilla simulation
-    */
-
-/*
-  // mass function weighting
-	if (Redshift_end == 0.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m10_14_selected_0.1.txt");
-	if (Redshift_end == 0.5) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_094_m10_14_selected_0.1.txt");
-	if (Redshift_end == 1.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_066_m10_14_selected_0.1.txt");
-	if (Redshift_end == 2.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_039_m10_14_selected_0.1.txt");
-	if (Redshift_end == 3.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_027_m10_14_selected_0.1.txt");
-	if (Redshift_end == 4.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_019_m10_14_selected_0.1.txt");
-	if (Redshift_end == 5.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_013_m10_14_selected_0.1.txt");
-	if (Redshift_end == 6.0) sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_009_m10_14_selected_0.1.txt");
-*/
-	//sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_selected.txt");
-
-	if(Mass_bin == 11.0)
+	if(!(  fd=fopen(Mah_file_name,"r")))
 	{
-			//sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m11.0.txt");
-		sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m11.0_selected.txt");
-	}
-	if(Mass_bin == 12.0)
-	{
-		sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m12.0.txt");
-	}
-	if(Mass_bin > 11.0 && Mass_bin <11.5)
-	{
-		//sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m11.1.txt");
-		sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m11.1_selected.txt");
-	}
-	if(Mass_bin > 12.0 && Mass_bin <12.5)
-	{
-		printf("yes!\n");
-		sprintf(filename, "/Users/luyu/project/disc/results/mah_less2/mah_180_m12.1.txt");
-	}
-	if(!(  fd=fopen(filename,"r")))
-	{
-		printf("I cannot open the file '%s'. %g %g\n",filename, Redshift_end, Mass_bin);
+		printf("I cannot open the file '%s'. %g %g\n", Mah_file_name, Redshift_end, Mass_bin);
 		exit(1);
 	}
 	//fscanf(fd, "%s", sbuf);

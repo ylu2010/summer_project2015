@@ -18,7 +18,7 @@
 double do_reionization(double mvir, double Zcurr)
 {
   double alpha, a, a0, ar, f_of_a, a_on_a0, a_on_ar, mass, Mfiltering, Mjeans, Mchar, mass_to_use, modifier;
-  double Tvir, Vchar, omegaZ, xZ, deltacritZ, HubbleZ;
+  double Tvir, Vchar, deltacritZ, HubbleZ;
 
   /*  we use the fitting formulae given by Kravtsov et al. (2004) Appendix B,
    * the model is described in Gnedin (2000) */
@@ -59,8 +59,8 @@ double do_reionization(double mvir, double Zcurr)
 
   /*  calculate the characteristic mass coresponding to a halo temperature of 10^4K */
   Vchar = sqrt(Tvir / 36.0);
-  //omegaZ = Omega * (pow(1.0 + Zcurr, 3.0) / (Omega * pow(1.0 + Zcurr, 3.0) + Omega_Lambda0));
-  //xZ = omegaZ - 1.0;
+  //double omegaZ = Omega * (pow(1.0 + Zcurr, 3.0) / (Omega * pow(1.0 + Zcurr, 3.0) + Omega_Lambda0));
+  //double xZ = omegaZ - 1.0;
   //deltacritZ = 18.0 * M_PI * M_PI + 82.0 * xZ - 39.0 * xZ * xZ;
   deltacritZ = Delta_vir(Zcurr); // use written function to replace above 3 lines
   HubbleZ = H0 * sqrt(Omega_M0 * pow(1.0 + Zcurr, 3.0) + Omega_Lambda0);

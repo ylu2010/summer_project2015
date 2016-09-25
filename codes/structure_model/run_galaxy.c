@@ -87,7 +87,7 @@ int finalize_run(void)
 
 int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode, int irun)
 {
-	int ihalo, ibuf;
+	int ihalo;
 	struct galaxy gal;
 	char fname_pred[200];
 
@@ -99,7 +99,7 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 
 	if(Write_pred_file && Write_pred_saparately)
 	{
-		sprintf(fname_pred, "pred_%04d_z%3.1f.dat", irun, Redshift_end);
+		sprintf(fname_pred, "%s/pred_%04d_z%3.1f.dat", OutputDir, irun, Redshift_end);
 		fp_pred=fopen(fname_pred, "w");
 	}
 
@@ -136,24 +136,24 @@ void init_file(int irun)
 	char fname_disc[200];
     char fname_snap[200];
 
-	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
+	sprintf(fname_pred, "%s/sample_z%3.1f_m%d.dat", OutputDir, Redshift_end, irun);
 	fp_pred=fopen(fname_pred, "w");
 
 
 	{
-		sprintf(fname_hist, "hist.dat");
+		sprintf(fname_hist, "%s/hist.dat", OutputDir);
 		fp_hist=fopen(fname_hist,"w");
 		fprintf(fp_hist, "#z thubble MassHalo MassBin MassHot MassCold MassStar MassEject MassColdAtomic MassColdMolecular MassColdIonized RadiusHalo RadiusDisc RadiusHalfCold RadiusHalfStar RadiusCooling ConcenHalo RateHaloAccretion RateCooling RateStarFormation RateOutflow VelocityVirial EntropyVirial TimeCooling MetalHot MetalCold MetalStar MetalEject \n");
 	}
 
 	{
-		sprintf(fname_disc, "disc.dat");
+		sprintf(fname_disc, "%s/disc.dat", OutputDir);
 		fp_disc=fopen(fname_disc,"w");
 		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR StellarAge MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo MassBin\n");
 	}
 
     {
-        sprintf(fname_snap, "snap.dat");
+        sprintf(fname_snap, "%s/snap.dat", OutputDir);
         fp_snap=fopen(fname_snap,"w");
         fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR StellarAge MetallicityCold MetallicityStar MassProfStar MassStar MassHalo MassBin\n");
     }

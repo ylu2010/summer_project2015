@@ -103,7 +103,7 @@ double random_number_gstructure(int flag)
 double interpolate_bipoint(double *x, double *y, int n, double x0, int flag)
 {
     int i;
-    double x1, x2, dx, y0;
+    double x1, x2, y0;
 
 
     if (flag >=0 )
