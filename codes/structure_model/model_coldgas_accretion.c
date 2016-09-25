@@ -51,8 +51,8 @@ void cold_gas_accretion(struct galaxy *gal, double thubble, double dt)
 
 void cold_gas_accretion_surface(struct galaxy *gal, double thubble, double dt)
 {
-	int i, j, k, nbin;
-	double cr, bar, z, r, sig0, tdyn, t0, hr=0.0;
+	int i, nbin;
+	double cr, bar, z, r, sig0, tdyn, hr=0.0;
 	double zhot;
 
 	if (gal->MassHot > 0.0) zhot = gal->MetalHot/gal->MassHot;

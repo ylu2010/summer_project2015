@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include "variables.h"
@@ -42,6 +43,7 @@ double StarFormationCriticalSurfaceDensity; //Msun/pc^2 no use for the Krumholz 
 double StarFormationEfficiency; // no use for Krumholz model
 double EntropyRatio;
 
+char Cooling_function_dir[400];
 char Mah_file_name[400];
 char OutputDir[400];
 
@@ -58,7 +60,11 @@ void read_parameter_file(char *fname)
     printf("\nreading parameter file: %s!\n\n", fname);
     
 	strcpy(tag[nt], "OutputDir");
-	addr[nt] = &OutputDir;
+	addr[nt] = OutputDir;
+	id[nt++] = STRING;
+
+	strcpy(tag[nt], "Cooling_function_dir");
+	addr[nt] = Cooling_function_dir;
 	id[nt++] = STRING;
 
     strcpy(tag[nt], "Mah_simu");
