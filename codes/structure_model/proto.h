@@ -17,7 +17,7 @@ int set_varying_parameters(double *params, int nparams);
 int set_predictions(double *p, int np, struct galaxy *gal, int ihalo);
 
 // run_galaxy.c
-int setup_run(void);
+int setup_run(char *fname); 
 int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode, int ip);
 int finalize_run(void);
 
@@ -97,6 +97,10 @@ double cooling_rate_shell(struct galaxy *gal, double hubble_time, double dt, int
 
 // model_adiabatic_contraction.c
 void adiabatic_contraction(struct galaxy *gal);
+
+// setup_parameters.c
+void read_parameter_file(char *fname);
+void init_parameters(void);
 
 #ifdef __cplusplus /* If this is a C++ compiler, use C linkage */
 }

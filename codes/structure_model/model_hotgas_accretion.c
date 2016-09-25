@@ -118,9 +118,9 @@ double do_prevention(struct galaxy *gal, double z)
     double mvir, mterm, zterm;
 
     mvir = gal->MassHalo;
-    mterm = pow(mvir / Par.PreventionMassScale, Par.PreventionMassIndex);
+    mterm = 1. + pow(Par.PreventionMassScale / mvir, Par.PreventionMassIndex);
     zterm = exp(-Par.PreventionRedshift * z );
-    fraction = dmin( 1.0, mterm / zterm);
+    fraction = dmin( 1.0, zterm/mterm);
     return fraction;
 }
 
