@@ -22,7 +22,6 @@ static float metallicity[]={
     -0.00,
     +0.05};
 static float LogLambda[8][91];
-static float *ccore, *mratio;
 
 void read_cooling_function(void)
 {
@@ -45,8 +44,7 @@ void read_cooling_function(void)
     for(i=0; i<8; i++)metallicity[i]+=log10(SolarMetallicity);
     for(i=0; i<8; i++)
     {
-        sprintf(filename,"/Users/Nathan/project_data/ModelTables_cb07/CoolFunctions/stripped_%s", coolfilename[i]);
-		//sprintf(filename,"/Users/luyu/project_data/ModelTables_cb07/CoolFunctions/stripped_%s", coolfilename[i]);
+		sprintf(filename,"%s/stripped_%s", Cooling_function_dir, coolfilename[i]);
         if(!(  fd=fopen(filename,"r")))
         {
             printf("I can not open the file '%s'.",filename);
@@ -88,20 +86,13 @@ float get_LogLambda(float logtemp, float logmetal)
 
 
 
-static float rcool_old = 0.0;
-
 double cooling_rate(struct galaxy *gal, double hubble_time, double dt, int model)
 {
-	double rcore, arv, arc, rho_0;
-	double t_gas, z_gas, gas;
+	double rcore, rho_0;
+	double t_gas, z_gas;
 	double logLambda, cof;
-	double cool_time, rcool, rcool1, rcool2, dhotgas, cool_rate, dyn_time;
-	float mr;
-	float con, dcon;
-	int i;
-	unsigned long j;
+	double cool_time, rcool, cool_rate, dyn_time;
 
-	double H0kpc=0.1, H0mpc=100.;
 	double mvir, rvir, vvir, hotgas, coldgas;
 
 	mvir = gal->MassHalo;
@@ -125,7 +116,7 @@ double cooling_rate(struct galaxy *gal, double hubble_time, double dt, int model
 		//	/UnitMass_in_g*(UnitLength_in_cm*UnitLength_in_cm*UnitLength_in_cm);
 		cof= 0.9 *PROTONMASS*BOLTZMANN*t_gas/pow(10,logLambda)
 			/UnitMass_in_g*(UnitLength_in_cm*UnitLength_in_cm*UnitLength_in_cm);
-		cof*=1./UnitTime_in_Second;//H0mpc*UnitVelocity_in_cm_per_s/UnitLength_in_cm;
+		cof*=1./UnitTime_in_Second;
 		switch(model)
         {
             case 1: // croton
@@ -189,18 +180,13 @@ double specific_angular_momentum_profile(double r)
 
 double cooling_rate_shell(struct galaxy *gal, double hubble_time, double dt, int model)
 {
-	double rcore, arv, arc, rho_0;
-	double t_gas, z_gas, logz_gas, gas;
+	double t_gas, logz_gas;
 	double logLambda, cof, fac, den;
-	double cool_time, rcool, rcool1, rcool2, dhotgas, cool_rate, dyn_time, ff_time, cr=0;
-	double j_specific=0, j_gas=0, j_halo=0, halo_mass, mstar, hr;
-	float mr;
-	float con, dcon;
+	double cool_time, rcool, cool_rate, dyn_time, ff_time, cr=0;
+	double j_specific=0, j_gas=0, j_halo=0, halo_mass, mstar;
 	int i;
-	unsigned long j;
 
-	double H0kpc=0.1, H0mpc=100.;
-	double mvir, rvir, vvir, hotgas, coldgas, rdisk;
+	double mvir, rvir, vvir, hotgas, rdisk;
 
 	mstar = gal->MassStar;
 	mvir = gal->MassHalo;

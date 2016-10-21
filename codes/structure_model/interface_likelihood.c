@@ -49,7 +49,11 @@ int set_predictions(double *p, int np, struct galaxy *gal, int ihalo)
 
 void likelihood_init(void)
 {
-	setup_run();
+	char parameter_file[200];
+
+	sprintf(parameter_file, "PARAMETER");
+    setup_run(parameter_file);
+
 }
 
 void likelihood_finalize(void)

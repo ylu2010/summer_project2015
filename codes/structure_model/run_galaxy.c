@@ -27,7 +27,7 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 0;
+int Do_preheating = 1;
 int Star_formation_model = 1;
 int Do_reinfall = 0;
 int N_halo = 11;
@@ -44,6 +44,7 @@ int Write_snap_file=1;
 double Redshift;
 double Redshift_end=0.0;
 
+char Mah_file_name[400];
 struct parameter Par;
 
 FILE *fp_head;
@@ -55,7 +56,7 @@ FILE *fp_disc;
 FILE *fp_list;
 FILE *fp_snap;
 
-int setup_run(void)
+int setup_run(char *fname)
 {
 
 	UnitMass_in_g = MSUN_IN_G;
@@ -64,53 +65,9 @@ int setup_run(void)
 	UnitTime_in_Second = 1e9*365*24*3600.;
 	UnitVelocity_in_cm_per_s = 1e5;
 
-	Par.Reionization_z0 = 12;
-	Par.Reionization_zr = 11;
+	read_parameter_file(fname);
 
-	Par.BaryonAccretionFraction = 1.0;
-	Par.StellarMassLossFraction = 0.43;//0.35/1.35;
-	Par.Yield = 0.03;
-
-	Par.MassFractionEjectToHot = 0.0;
-	Par.ReincorporationTimeScale = 1e33;
-
-	Par.PreventionMassIndex = 3.0;
-
-	if ( Do_preheating)
-	{
-		Par.PreheatEntropySlope = 0.2;
-		Par.PreheatEntropy = 10;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
-		Par.EntropyProfileIndex = 0.0;
-		Par.DiskRadiusFactor = 1.1;
-		Par.ZFractionYieldToEject = 0.0;// for PR model
-		Par.ZFractionYieldToHot = 0.1;  // for PR model
-		Par.GalaxyHeatingEfficiency = 0.0;//1.1;
-		Par.SNLoadingFactor= 1;
-		Par.SNLoadingFactorIndex = 0.;
-	}
-	else
-	{
-		Par.PreheatEntropySlope = 0.;
-		Par.PreheatEntropy = 0.0;
-		Par.EntropyProfileIndex = 1.1;//4./3;
-		Par.DiskRadiusFactor = 1.2;    // for EJ model
-		Par.ZFractionYieldToEject = 0.;// for EJ model
-		Par.ZFractionYieldToHot = 0.1;  // for EJ model
-		Par.GalaxyHeatingEfficiency = 0.;
-		Par.SNLoadingFactor= 1;
-		Par.SNLoadingFactorIndex = 2;
-		if (Do_reinfall)
-		{
-			//Par.DiskRadiusFactor = 0.6;  // for RI model
-			Par.ReincorporationTimeScale = 18.0; 
-			Par.ZFractionYieldToEject = 0.;
-			Par.ZFractionYieldToHot = 0.;
-		}
-	}
-
-	Par.StarFormationCriticalSurfaceDensity = 10; //Msun/pc^2 no use for the Krumholz model
-	Par.StarFormationEfficiency = 0.0; // no use for Krumholz model
-	Par.EntropyRatio = 1;
+	init_parameters();
 
 	init_cosmo();
 
@@ -134,7 +91,7 @@ int finalize_run(void)
 
 int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode, int irun)
 {
-	int ihalo, ibuf;
+	int ihalo;
 	struct galaxy gal;
 	char fname_pred[200];
 
@@ -148,14 +105,14 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 
 	if(Write_pred_file && Write_pred_saparately)
 	{
-		sprintf(fname_pred, "pred_%04d_z%3.1f.dat", irun, Redshift_end);
+		sprintf(fname_pred, "%s/pred_%04d_z%3.1f.dat", OutputDir, irun, Redshift_end);
 		fp_pred=fopen(fname_pred, "w");
 	}
 
 	for (ihalo=0; ihalo<N_halo; ihalo++)
 	{
 		if (Mah_simu) select_simu_mah(ihalo);
-		else Mass_bin = LogHaloMassArray[ihalo];
+		//else Mass_bin = LogHaloMassArray[ihalo];
 
 		init(&gal);
 
@@ -188,6 +145,7 @@ void init_file(int irun)
 	char fname_disc[200];
     char fname_snap[200];
 
+<<<<<<< HEAD
     {
         sprintf(fname_head, "header.dat");
         fp_head=fopen(fname_head,"w");
@@ -195,11 +153,14 @@ void init_file(int irun)
     }
     
 	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
+=======
+	sprintf(fname_pred, "%s/sample_z%3.1f_m%d.dat", OutputDir, Redshift_end, irun);
+>>>>>>> origin/adding-metallicity-profile
 	fp_pred=fopen(fname_pred, "w");
 
 
 	{
-		sprintf(fname_hist, "hist.dat");
+		sprintf(fname_hist, "%s/hist.dat", OutputDir);
 		fp_hist=fopen(fname_hist,"w");
 		fprintf(fp_hist, "#z thubble MassHalo MassHot MassCold MassStar MassEject MassColdAtomic MassColdMolecular MassColdIonized RadiusHalo RadiusDisc RadiusHalfCold RadiusHalfStar RadiusCooling ConcenHalo RateHaloAccretion RateCooling RateStarFormation RateOutflow VelocityVirial EntropyVirial TimeCooling MetalHot MetalCold MetalStar MetalEject \n");
 	}
@@ -215,13 +176,13 @@ void init_file(int irun)
     }
 
 	{
-		sprintf(fname_disc, "disc.dat");
+		sprintf(fname_disc, "%s/disc.dat", OutputDir);
 		fp_disc=fopen(fname_disc,"w");
 		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR StellarAge MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo\n");
 	}
 
     {
-        sprintf(fname_snap, "snap.dat");
+        sprintf(fname_snap, "%s/snap.dat", OutputDir);
         fp_snap=fopen(fname_snap,"w");
         fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR StellarAge MetallicityCold MetallicityStar MassProfStar MassStar MassHalo\n");
     }

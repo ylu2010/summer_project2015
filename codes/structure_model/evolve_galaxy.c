@@ -57,7 +57,8 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 	double z0, dz, dz0, z;
 	double mh, ms, mc, mhot;
 	double dmhdt, thubble, dt, dmh;
-	double dar, bar, f_hot_accretion, f_cloud_accretion;
+	//double dar, bar, 
+	double f_hot_accretion, f_cloud_accretion;
 
 
 //	factor = 1.e3 * ELECTRONVOLT * pow(BaryonFrac/0.6/PROTONMASS*UnitMass_in_g, 2./3)/BOLTZMANN / (UnitLength_in_cm * UnitLength_in_cm);
@@ -222,7 +223,7 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		z -= dz;
 		Redshift = z;
 		mh += dmh;
-		dmhdt = dar;
+		//dmhdt = dar;
 		gal->z = z;
 		gal->MassHalo = mh;
 

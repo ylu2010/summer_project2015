@@ -12,20 +12,26 @@ extern double UnitLength_in_cm;
 extern double UnitTime_in_Megayears;
 extern double UnitTime_in_Second;
 extern double UnitVelocity_in_cm_per_s;
+
 extern double BaryonFrac;
 extern double SolarMetallicity;
 extern double MinimumMetallicityRelativeToSolar;
-
 extern int Metal_gas_evolu;
 extern int Mah_simu;
 extern int Do_preheating;
 extern int Do_reinfall;
 extern int Star_formation_model;
-extern float Mass_bin;
+extern double Mass_bin;
+extern double Redshift_end;
+
 extern int Resize_radius_bins;
 extern double Redshift;
-extern double Redshift_end;
 extern double Bin_size_time;
+
+extern char Cooling_function_dir[400];
+extern char Mah_file_name[400];
+extern char OutputDir[400];
+extern int Write_pred_saparately;
 
 struct parameter
 {

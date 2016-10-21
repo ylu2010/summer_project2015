@@ -109,14 +109,14 @@ double fun_fr_disk_approx(double lam_p, double md, double c)
 
 double disk_radius(struct galaxy *gal)
 {
-	double md, lam_p, fc, fr, rd;
+	double lam_p, fc, fr, rd;
 
 	if ( Do_preheating)
 	{
 		fc = fun_fc_disk(gal->ConcenHalo);
 
 		lam_p = gal->SpinHalo * gal->SpinCooling;
-		//md = (gal->MassCold + gal->MassStar) / gal->MassHalo;
+		// double md = (gal->MassCold + gal->MassStar) / gal->MassHalo;
 		//fr = fun_fr_disk_approx(lam_p, md, gal->ConcenHalo); // not self-consistent when computing for newly accreted gas mass
 		/*
 		if(gal->MassCold+gal->MassStar > 0)
