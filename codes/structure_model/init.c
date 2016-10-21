@@ -25,7 +25,6 @@ void init(struct galaxy *gal)
 	gal->ntbin = ntbin;
     gal->z = 100;
     gal->MassHalo = 0.0;
-    gal->MassBin = 0.0;
     gal->MassHot = 0.0;
     gal->MassCloud=0.0;
     gal->MassCold = 0.0;
@@ -48,6 +47,7 @@ void init(struct galaxy *gal)
     gal->SpinHalo = 0.035;
     gal->SpinCooling = 1;
     gal->TimeCooling = 0.0;
+    gal->ntimestep = 0;
     /*
     gal->RadiusInner = malloc(gal->nbin * sizeof(double));
     gal->RadiusOuter = malloc(gal->nbin * sizeof(double));
@@ -93,6 +93,11 @@ void init(struct galaxy *gal)
     	{
     		gal->SDensitySFH[i][j] = 0.0;
     	}
+        for(j=0; j<1700; j++)
+        {
+            gal->SFH[i][j] = 0.0;
+            gal->ZFH[i][j] = 0.0;
+        }
     }
     Bin_size_time = hubble_time(0.0)/ntbin * xH0_recip;
     for(j=0; j<ntbin; j++)

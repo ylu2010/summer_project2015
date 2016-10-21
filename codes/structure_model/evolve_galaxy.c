@@ -74,7 +74,6 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 	gal->MassCold = mc = 0;
 	dz = dz0;
 
-	gal->MassBin = Mass_bin; //to easily separate different mass halos in data tables
 
 	//reset_parameter(z, mh); // *******************///
 
@@ -197,13 +196,14 @@ void evolve_galaxy(struct galaxy *gal, int mode)
 		*/
 		if(Write_hist_file)
 		{
+            gal->ntimestep += 1;
 			f_hot_accretion = hot_gas_accretion_fraction(gal, z);
 
 			gal->MassHot = dmax(gal->MassHalo * f_hot_accretion - (gal->MassStar+gal->MassCold+gal->MassEject), 0);
 			disc_mass_composition(gal);
 			//printf("mcold=%g matom=%g %g\n", gal->MassCold, gal->MassColdAtomic, f_hot_accretion);
-			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
-				gal->MassHalo, gal->MassBin, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
+			fprintf(fp_hist, "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n", gal->z, thubble,
+				gal->MassHalo, gal->MassHot, gal->MassCold, gal->MassStar, gal->MassEject,
 				gal->MassColdAtomic, gal->MassColdMolecular, gal->MassColdIonized,
 				gal->RadiusHalo, gal->RadiusDisc, gal->RadiusHalfCold, gal->RadiusHalfStar, gal->RadiusCooling, gal->ConcenHalo,
 				gal->RateHaloAccretion, gal->RateCooling, gal->RateStarFormation, gal->RateOutflow,
@@ -287,6 +287,9 @@ void evolve_galaxy(struct galaxy *gal, int mode)
      */
     
 	if(Write_prof_file) print_galaxy(gal);
+    if(Write_SFH_file) print_SFH(gal);
+    if(Write_ZFH_file) print_ZFH(gal);
+    fprintf(fp_head, "%d\n", gal->ntimestep);
 }
 
 void halo_adjust(struct galaxy *gal, double z, double mh)
@@ -345,7 +348,7 @@ void print_galaxy(struct galaxy *gal)
 	int i;
 	for(i=0; i<gal->nbin; i++)
 	{
-        fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+        fprintf(fp_disc, "%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
                 i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
                 (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i]/1e12), (gal->SDensityColdAtomic[i]/1e12),
                 gal->MassProfHalo[i], gal->MassProfStar[i], gal->MassProfCold[i], gal->MassProfHot[i],
@@ -355,7 +358,7 @@ void print_galaxy(struct galaxy *gal)
                 gal->MassProfDM[i], gal->MassProfDMContracted[i],
                 gal->MassMetalCold[i], gal->MassMetalStar[i], gal->SDensityMetalCold[i]/1e12, gal->SDensityMetalStar[i]/1e12,
                 gal->MetallicityCold[i], gal->MetallicityStar[i],
-                gal->MassStar, gal->MassHalo, gal->MassBin);
+                gal->MassStar, gal->MassHalo);
 	}
 }
 
@@ -371,12 +374,39 @@ void print_snapshot(struct galaxy *gal, double z,double thubble, double dt, doub
     int i;
     for(i=0; i<gal->nbin; i++)
     {
-        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
+        fprintf(fp_snap, "%g %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n",
                 z,i, (gal->RadiusInner[i])*1e3, (gal->RadiusOuter[i])*1e3, (gal->RadiusInner[i]/gal->RadiusHalfStar),
                 (gal->SDensityCold[i])/1e12, (gal->SDensityStar[i])/1e12, (gal->SDensityColdMolecular[i])/1e12, (gal->SDensityColdAtomic[i]/1e12),
                 gal->SDensitySFR[i], gal->SDensityOFR[i], gal->SDensityCAR[i], gal->StellarAge[i],
                 gal->MetallicityCold[i], gal->MetallicityStar[i],
-                gal->MassProfStar[i], gal->MassStar, gal->MassHalo, gal->MassBin);
+                gal->MassProfStar[i], gal->MassStar, gal->MassHalo);
     }
 }
+
+void print_SFH(struct galaxy *gal)
+{
+    int i,j;
+    for(j=0; j<gal->ntimestep; j++)
+    {
+        for(i=0; i<gal->nbin; i++)
+        {
+            fprintf(fp_SFH, "%g ", gal->SFH[i][j]);
+        }
+        fprintf(fp_SFH, "\n");
+    }
+}
+
+void print_ZFH(struct galaxy *gal)
+{
+    int i,j;
+    for(j=0; j<gal->ntimestep; j++)
+    {
+        for(i=0; i<gal->nbin; i++)
+        {
+            fprintf(fp_ZFH, "%g ", gal->ZFH[i][j]);
+        }
+        fprintf(fp_ZFH, "\n");
+    }
+}
+
 

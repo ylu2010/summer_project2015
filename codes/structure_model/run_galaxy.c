@@ -31,12 +31,14 @@ int Do_preheating = 0;
 int Star_formation_model = 1;
 int Do_reinfall = 0;
 int N_halo = 11;
-float Mass_bin = 12.0;
+float Mass_bin = 1;//12.0;
 float LogHaloMassArray[11]={10.0,10.25, 10.5, 10.75, 11.0, 11.25, 11.5, 11.75, 12.0,12.25,12.5};
 int Resize_radius_bins=1;
 int Write_pred_file=1;
 int Write_pred_saparately=0;
 int Write_hist_file=1;
+int Write_SFH_file=1;
+int Write_ZFH_file=1;
 int Write_prof_file=1;
 int Write_snap_file=1;
 double Redshift;
@@ -44,7 +46,10 @@ double Redshift_end=0.0;
 
 struct parameter Par;
 
+FILE *fp_head;
 FILE *fp_hist;
+FILE *fp_SFH;
+FILE *fp_ZFH;
 FILE *fp_pred;
 FILE *fp_disc;
 FILE *fp_list;
@@ -134,6 +139,8 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 	char fname_pred[200];
 
 	init_file(irun);
+    fprintf(fp_head, "%d %d\n", N_halo, N_RADIUS_BIN);
+    fprintf(fp_head, "#ntbin\n");
 
 	set_varying_parameters(params, nparams);
 
@@ -173,11 +180,20 @@ int run_galaxy(double *params, int nparams, double *preds, int npreds, int mode,
 
 void init_file(int irun)
 {
-	char fname_pred[200];
+	char fname_head[200];
+    char fname_pred[200];
 	char fname_hist[200];
+    char fname_SFH[200];
+    char fname_ZFH[200];
 	char fname_disc[200];
     char fname_snap[200];
 
+    {
+        sprintf(fname_head, "header.dat");
+        fp_head=fopen(fname_head,"w");
+        fprintf(fp_head, "#nMAH nrbin\n");
+    }
+    
 	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
 	fp_pred=fopen(fname_pred, "w");
 
@@ -185,19 +201,29 @@ void init_file(int irun)
 	{
 		sprintf(fname_hist, "hist.dat");
 		fp_hist=fopen(fname_hist,"w");
-		fprintf(fp_hist, "#z thubble MassHalo MassBin MassHot MassCold MassStar MassEject MassColdAtomic MassColdMolecular MassColdIonized RadiusHalo RadiusDisc RadiusHalfCold RadiusHalfStar RadiusCooling ConcenHalo RateHaloAccretion RateCooling RateStarFormation RateOutflow VelocityVirial EntropyVirial TimeCooling MetalHot MetalCold MetalStar MetalEject \n");
+		fprintf(fp_hist, "#z thubble MassHalo MassHot MassCold MassStar MassEject MassColdAtomic MassColdMolecular MassColdIonized RadiusHalo RadiusDisc RadiusHalfCold RadiusHalfStar RadiusCooling ConcenHalo RateHaloAccretion RateCooling RateStarFormation RateOutflow VelocityVirial EntropyVirial TimeCooling MetalHot MetalCold MetalStar MetalEject \n");
 	}
+    
+    {
+        sprintf(fname_SFH, "SFH.dat");
+        fp_SFH=fopen(fname_SFH,"w");
+    }
+    
+    {
+        sprintf(fname_ZFH, "ZFH.dat");
+        fp_ZFH=fopen(fname_ZFH,"w");
+    }
 
 	{
 		sprintf(fname_disc, "disc.dat");
 		fp_disc=fopen(fname_disc,"w");
-		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR StellarAge MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo MassBin\n");
+		fprintf(fp_disc, "#i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic MassProfHalo MassProfStar MassProfCold MassProfHot DensityProfHot TemperatureProfHot CoolingRate CoolingTime SDensitySFR SDensityOFR SDensityCAR StellarAge MassProfDM MassProfDMContracted MassMetalCold MassMetalStar SDensityMetalCold SDensityMetalStar MetallicityCold MetallicityStar MassStar MassHalo\n");
 	}
 
     {
         sprintf(fname_snap, "snap.dat");
         fp_snap=fopen(fname_snap,"w");
-        fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR StellarAge MetallicityCold MetallicityStar MassProfStar MassStar MassHalo MassBin\n");
+        fprintf(fp_snap, "#z i RadiusInner RadiusOuter RadiusIso SDensityCold SDensityStar SDensityColdMolecular SDensityColdAtomic SDensitySFR  SDensityOFR SDensityCAR StellarAge MetallicityCold MetallicityStar MassProfStar MassStar MassHalo\n");
     }
  
     
@@ -207,8 +233,11 @@ void init_file(int irun)
 
 void close_file(void)
 {
-	fclose(fp_pred);
+	fclose(fp_head);
+    fclose(fp_pred);
 	fclose(fp_hist);
+    fclose(fp_SFH);
+    fclose(fp_ZFH);
 	fclose(fp_disc);
     fclose(fp_snap);
 }
