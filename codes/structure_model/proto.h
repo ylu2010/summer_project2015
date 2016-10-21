@@ -80,6 +80,8 @@ void stellar_age_calc(struct galaxy *gal, double thubble);
 void halo_adjust(struct galaxy *gal, double z, double mh);
 void print_galaxy(struct galaxy *gal);
 void print_snapshot(struct galaxy *gal, double z, double thubble, double dt, double mh);
+void print_SFH(struct galaxy *gal);
+void print_ZFH(struct galaxy *gal);
 
 double dmax(double x, double y);
 double dmin(double x, double y);

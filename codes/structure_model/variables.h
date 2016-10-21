@@ -63,8 +63,8 @@ struct galaxy
 {
 	int nbin;
 	int ntbin; // time array
+    int ntimestep;
     double z;
-    double MassBin; //new //to better separate halos in data tables
     double MassHalo;
     double MassHot;
     double MassCloud;
@@ -129,10 +129,15 @@ struct galaxy
     double TimeArray[N_TIME_BIN];
     double StarFormationHistory[N_TIME_BIN]; // stellar mass formed in a time interval
     double SDensitySFH[N_RADIUS_BIN][N_TIME_BIN];
+    double SFH[N_RADIUS_BIN][1700];
+    double ZFH[N_RADIUS_BIN][1700];
 };
 
 extern struct parameter Par;
+extern FILE *fp_head;
 extern FILE *fp_hist;
+extern FILE *fp_SFH;
+extern FILE *fp_ZFH;
 extern FILE *fp_disc;
 extern FILE *fp_pred;
 extern FILE *fp_list;
@@ -140,6 +145,8 @@ extern FILE *fp_snap;
 
 extern int Write_pred_file;
 extern int Write_hist_file;
+extern int Write_SFH_file;
+extern int Write_ZFH_file;
 extern int Write_prof_file;
 extern int Write_snap_file;
 
