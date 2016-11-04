@@ -27,7 +27,7 @@ double MinimumMetallicityRelativeToSolar = 0.001;
 
 int Metal_gas_evolu=1;
 int Mah_simu = 0;
-int Do_preheating = 1;
+int Do_preheating = 0;
 int Star_formation_model = 1;
 int Do_reinfall = 0;
 int N_halo = 11;
@@ -145,17 +145,12 @@ void init_file(int irun)
 	char fname_disc[200];
     char fname_snap[200];
 
-<<<<<<< HEAD
     {
         sprintf(fname_head, "header.dat");
         fp_head=fopen(fname_head,"w");
         fprintf(fp_head, "#nMAH nrbin\n");
     }
-    
-	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
-=======
 	sprintf(fname_pred, "%s/sample_z%3.1f_m%d.dat", OutputDir, Redshift_end, irun);
->>>>>>> origin/adding-metallicity-profile
 	fp_pred=fopen(fname_pred, "w");
 
 
