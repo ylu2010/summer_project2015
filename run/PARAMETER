@@ -2,7 +2,11 @@
 %----- Model Parameter File --------------
 %------------------------------------------
 
+<<<<<<< HEAD
 Cooling_function_dir				/Users/Nathan/project_data/ModelTables_cb07/CoolFunctions
+=======
+Cooling_function_dir				/Users/luyu/project_data/ModelTables_cb07/CoolFunctions
+>>>>>>> origin/adding-metallicity-profile
 OutputDir							./
 Mah_simu							0
 Mah_file_name						/Users/Nathan/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_180_m10_12_selected.txt

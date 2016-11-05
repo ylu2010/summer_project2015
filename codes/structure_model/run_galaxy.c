@@ -145,12 +145,24 @@ void init_file(int irun)
 	char fname_disc[200];
     char fname_snap[200];
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/adding-metallicity-profile
     {
         sprintf(fname_head, "header.dat");
         fp_head=fopen(fname_head,"w");
         fprintf(fp_head, "#nMAH nrbin\n");
     }
+<<<<<<< HEAD
 	sprintf(fname_pred, "%s/sample_z%3.1f_m%d.dat", OutputDir, Redshift_end, irun);
+=======
+    
+	sprintf(fname_pred, "sample_z%3.1f_m%d.dat", Redshift_end, irun);
+=======
+	sprintf(fname_pred, "%s/sample_z%3.1f_m%d.dat", OutputDir, Redshift_end, irun);
+>>>>>>> origin/adding-metallicity-profile
+>>>>>>> origin/adding-metallicity-profile
 	fp_pred=fopen(fname_pred, "w");
 
 

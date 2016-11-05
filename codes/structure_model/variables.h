@@ -21,7 +21,7 @@ extern int Mah_simu;
 extern int Do_preheating;
 extern int Do_reinfall;
 extern int Star_formation_model;
-extern float Mass_bin;
+extern double Mass_bin;
 extern double Redshift_end;
 
 extern int Resize_radius_bins;
