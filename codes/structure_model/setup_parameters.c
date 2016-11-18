@@ -79,6 +79,10 @@ void read_parameter_file(char *fname)
     addr[nt] = &Mass_bin;
     id[nt++] = DOUBLE;
     
+    strcpy(tag[nt], "Use_mass_array");
+    addr[nt] = &Use_mass_array;
+    id[nt++] = INT;
+    
     strcpy(tag[nt], "BaryonFrac");
     addr[nt] = &BaryonFrac;
     id[nt++] = DOUBLE;
