@@ -163,10 +163,6 @@ void read_parameter_file(char *fname)
     addr[nt] = &ReincorporationTimeScale;
     id[nt++] = DOUBLE;
 
-    strcpy(tag[nt], "PreventionMassIndex");
-    addr[nt] = &PreventionMassIndex;
-    id[nt++] = DOUBLE;
-
     strcpy(tag[nt], "PreheatEntropySlope");
     addr[nt] = &PreheatEntropySlope;
     id[nt++] = DOUBLE;
@@ -332,8 +328,8 @@ void init_parameters(void)
     Par.MassFractionEjectToHot = MassFractionEjectToHot;
     Par.ReincorporationTimeScale = ReincorporationTimeScale;
 
-	Par.PreventionMassScale = PreventionMassScale;
-    Par.PreventionMassIndex = PreventionMassIndex;
+	Par.PreventionMassScale = pow(10., PreventionMassScale);
+    //Par.PreventionMassIndex = PreventionMassIndex;
 	Par.PreventionRedshift = PreventionRedshift;
 
     Par.PreheatEntropySlope = PreheatEntropySlope;

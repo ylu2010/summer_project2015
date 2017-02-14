@@ -102,6 +102,9 @@ int main( int argc, const char* argv[] )
 
     mode = atoi(argv[2]);
 
+	strcpy(parameter_file, argv[1]);
+	read_parameter_file(parameter_file);
+
     param_interval = (struct interval *) malloc(sizeof(struct interval)*nparams);
     if (mode == 0)
     {

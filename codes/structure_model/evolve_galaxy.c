@@ -13,44 +13,6 @@
 #include "proto.h"
 #include "cosmo.h"
 
-void reset_parameter(double z, double m)
-{
-	//if ( m/mah(0.0) > 1./10)
-	//printf("c=%g\n", halo_concentration_prada(0, mah(0.0)));
-	if (m/mah(0.0) > 0.01/halo_concentration_prada(0, mah(0.0)))
-	{
-		Do_preheating = 1;
-		Par.PreheatEntropySlope = 0.2;
-		Par.PreheatEntropy = 12;//17;//12;//* pow(pow(10.,Mass_bin)/1e12, Par.PreheatEntropySlope);
-		Par.EntropyProfileIndex = 0.0;
-		Par.DiskRadiusFactor = 0.7;
-		Par.ZFractionYieldToEject = 0.;// for PR model
-		Par.ZFractionYieldToHot = 0.2;  // for PR model
-		Par.GalaxyHeatingEfficiency = 1.0;//1.;//1.1;
-		Par.SNLoadingFactor= 1.;
-		Par.SNLoadingFactorIndex = 0.;
-	}
-	else
-	{
-		Do_preheating = 0;
-		Par.PreheatEntropySlope = 0.;
-		Par.PreheatEntropy = 0.0;
-		Par.EntropyProfileIndex = 1.1;//4./3;
-		Par.DiskRadiusFactor = 0.8;    // for EJ model
-		Par.ZFractionYieldToEject = 0.;// for EJ model
-		Par.ZFractionYieldToHot = 0.2;  // for EJ model
-		Par.GalaxyHeatingEfficiency = 0.;
-		Par.SNLoadingFactor= 1;
-		Par.SNLoadingFactorIndex = 2;
-		if (Do_reinfall)
-		{
-			Par.DiskRadiusFactor = 0.5;  // for RI model
-			Par.ZFractionYieldToEject = 0.;
-			Par.ZFractionYieldToHot = 0.;
-		}
-	}
-}
-
 void evolve_galaxy(struct galaxy *gal, int mode)
 {
 	double z_min, z_max, mvir_in;
