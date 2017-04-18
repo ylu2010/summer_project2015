@@ -408,15 +408,15 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
         //sd_cold_tmp += fml;
 
         //loadingfactor += outflow_massloading_factor_surface(gal->SDensityStar[i]);
-        sd_ofr = dmin(loadingfactor * sd_sfr * dt, sd_cold_tmp);
-        sd_cold_tmp -= sd_ofr;
+        sd_ofr = dmin(loadingfactor * sd_sfr * dt, sd_cold_tmp) / dt; // devided by dt, make sure it is "rate". 
+        sd_cold_tmp -= sd_ofr * dt;
         //printf("debug: %d %g %g %g %g %g\n", i, gal->z, loadingfactor, sd_sfr, dt, fml);
         //exit(0);
         gal->SDensityCold[i] = dmax(0.0, sd_cold_tmp);
         gal->SDensitySFR[i] = sd_sfr; // / dt;
         gal->SDensityOFR[i] = sd_ofr; // / dt;
-        sfr += sd_sfr * area /dt; //if global metallicity calculated in loop, is this necessary?
-        ofr += sd_ofr * area /dt; //if global metallicity calculated in loop, is this necessary?
+        sfr += sd_sfr * area; //if global metallicity calculated in loop, is this necessary?
+        ofr += sd_ofr * area; //if global metallicity calculated in loop, is this necessary?
 
         mstar += gal->SDensityStar[i] * area;
         mcold += gal->SDensityCold[i] * area;
@@ -429,7 +429,7 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
         // sfr and ofr are global so using sd_sfr * area and sd_ofr * area / dt(???) instead
         gal->MassMetalStar[i] += sd_sfr * area * dt * zcold * (1-Par.StellarMassLossFraction);
         gal->MassMetalCold[i] += sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
-            - sd_ofr * area / dt * dt  * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
+            - sd_ofr * area * dt  * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
         gal->ZFH[i][ts] += gal->MassMetalCold[i];
         // gal->MassMetalHot[i] += sdr_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot; //Assumes hot mass deposited at location of star formation
 
@@ -441,9 +441,9 @@ void star_formation_surface_molecule(struct galaxy *gal, double t, double dt)
         //metallicity global
         gal->MetalStar += sd_sfr * area * dt * zcold * (1.-Par.StellarMassLossFraction);
         gal->MetalCold += sd_sfr * area * dt * Par.Yield * (1. - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
-            - sd_ofr * area / dt * dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
+            - sd_ofr * area * dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
         gal->MetalHot += sd_sfr * area * dt * Par.Yield * Par.ZFractionYieldToHot;
-        gal->MetalEject += sd_ofr * area / dt * dt * zcold + sd_sfr *area * dt * Par.Yield * Par.ZFractionYieldToEject;
+        gal->MetalEject += sd_ofr * area * dt * zcold + sd_sfr *area * dt * Par.Yield * Par.ZFractionYieldToEject;
         //coldadd = sd_sfr * area * dt * Par.Yield * (1 - Par.ZFractionYieldToEject - Par.ZFractionYieldToHot)
         //  - sd_ofr * area * dt / dt * zcold - sd_sfr * area * dt * zcold * (1. - Par.StellarMassLossFraction);
         //printf("debug_star_formation3: %g %g %g %g\n", t, gal->MetalCold, gal->MassMetalCold[i], coldadd);

@@ -329,7 +329,7 @@ void init_parameters(void)
     Par.ReincorporationTimeScale = ReincorporationTimeScale;
 
 	Par.PreventionMassScale = pow(10., PreventionMassScale);
-    //Par.PreventionMassIndex = PreventionMassIndex;
+    Par.PreventionMassIndex = PreventionMassIndex;
 	Par.PreventionRedshift = PreventionRedshift;
 
     Par.PreheatEntropySlope = PreheatEntropySlope;
