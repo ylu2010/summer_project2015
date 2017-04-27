@@ -1,0 +1,51 @@
+%------------------------------------------
+%----- Model Parameter File --------------
+%------------------------------------------
+
+Cooling_function_dir				/Users/luyu/project_data/ModelTables_cb07/CoolFunctions
+OutputDir							./
+Mah_simu							0
+Mah_file_name						/Users/luyu/Documents/Carnegie/Summer_2015/Github/summer_project2015/mah/mah_less2/mah_180_m10_12_selected.txt
+
+Mass_bin							12
+BaryonFrac							0.17
+Metal_gas_evolu						1
+Use_mass_array						0
+Do_preheating						0
+Do_reinfall							0
+Star_formation_model				1
+Redshift_end						0.0
+Write_pred_file						1
+Write_pred_saparately				0
+Write_hist_file						1
+Write_prof_file 					1
+Write_snap_file						1
+
+SolarMetallicity 					0.0134 
+MinimumMetallicityRelativeToSolar	0.0001
+
+Reionization_z0						12
+Reionization_zr 					11
+BaryonAccretionFraction 			1.0
+StellarMassLossFraction				0.47
+Yield								0.03
+MassFractionEjectToHot				0.0
+ReincorporationTimeScale			20.0
+PreheatEntropySlope					0.0
+PreheatEntropy						0.0
+EntropyProfileIndex					1.1
+DiskRadiusFactor					0.8
+ZFractionYieldToEject				0.0
+ZFractionYieldToHot					0.1
+GalaxyHeatingEfficiency				0.0
+SNLoadingFactor						2.0
+SNLoadingFactorIndex				2.0
+StarFormationCriticalSurfaceDensity	10.0 %Msun/pc^2 no use for the Krumholz model
+StarFormationEfficiency				0.0	
+EntropyRatio						1.0
+PreventionMassScale					10.0
+PreventionMassIndex					3.0
+PreventionRedshift					0.5
+
+
+

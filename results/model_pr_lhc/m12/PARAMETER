@@ -13,7 +13,6 @@ BaryonFrac							0.17
 Metal_gas_evolu						1
 Do_preheating						1
 Do_reinfall							1
-Do_reinfall_locally					0
 Star_formation_model				1
 Redshift_end						0.0
 Write_pred_file						1
